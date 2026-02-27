@@ -1,0 +1,368 @@
+:root {
+
+  --accent-color: #ff5500;
+  --accent-color-light: #ff8800;
+  --plyr-color-main: #ff5500;
+  --card-color: #979797;
+
+  --bg-color: #f2f2f2;
+  --text-color: #333333;
+
+  --darkmode-bg-color: #333333;
+  --darkmode-text-color: #ffffff;
+
+
+}
+
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen,
+    Ubuntu, Cantarell, sans-serif;
+
+  padding: 0px;
+}
+/* Dark Theme overrides */
+body.dark-mode {
+  --bg-color: var(--darkmode-bg-color);
+  --text-color: var(--darkmode-text-color);
+} 
+  
+.container {
+  max-width: 800px;
+  margin: 0 auto;
+  background: var(--bg-color);
+  border-radius: 10px;
+  padding: 0px;
+}
+
+
+h1 {
+  text-align: center;
+  color: #333;
+  margin-bottom: 30px;
+}
+
+.message {
+  margin-bottom: 20px;
+  padding: 12px 16px;
+  border-radius: 4px;
+  display: none;
+}
+
+.message.success {
+  display: block;
+  background-color: #d4edda;
+  color: #155724;
+  border: 1px solid #c3e6cb;
+}
+/* dark mode override */
+body.dark-mode .message.success {
+    background-color: var(--darkmode-bg-color);
+    color: var(--darkmode-text-color);
+}
+
+.message.error {
+  display: block;
+  background-color: var(--bg-color);
+  color: var(--accent-color);
+  border: 1px solid var(--accent-color);
+}
+
+body.dark-mode .message.error {
+    background-color: var(--darkmode-bg-color);
+}
+
+.top-section {
+  display: flex;
+  gap: 20px;
+  margin-bottom: 20px;
+  align-items: flex-start;
+}
+#artist {
+  background: var(--bg-color);
+  color: var(--text-color);
+}
+/* dark mode override */
+body.dark-mode #artist {
+    background: var(--darkmode-bg-color);
+    color: var(--darkmode-text-color);
+}
+
+#title {
+  background: var(--bg-color);
+  color: var(--text-color);
+} 
+
+/* dark mode override */
+body.dark-mode #title {
+    background: var(--darkmode-bg-color);
+    color: var(--darkmode-text-color);
+}
+
+.artwork-container {
+  flex-shrink: 0;
+}
+
+label {
+  display: block;
+  margin-bottom: 8px;
+  font-weight: 500;
+  color: var(--text-color);
+  font-size: 14px;
+}
+/* dark mode override */
+body.dark-mode label {
+    color: var(--darkmode-text-color);
+}
+
+.drop-zone {
+  width: 160px;
+  height: 160px;
+  border: 2px dashed var(--accent-color);
+  border-radius: 8px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.3s;
+  background-color: var(--bg-color);
+  position: relative;
+}
+/* dark mode override */
+body.dark-mode .drop-zone {
+    background-color: var(--darkmode-bg-color);
+}
+
+.drop-zone:hover {
+  border-color: var(--text-color);
+  background-color: var(--bg-color);
+}
+
+
+.drop-zone.dragover {
+  border-color: var(--text-color);
+  background-color: var(--bg-color);
+  transform: scale(1.05);
+}
+/* dark mode override */
+body.dark-mode .drop-zone.dragover {
+    background-color: var(--darkmode-bg-color);
+    border-color: var(--darkmode-text-color);
+} 
+
+.drop-zone-text {
+  font-size: 32px;
+}
+
+.drop-zone-subtext {
+  font-size: 11px;
+  color: var(--accent-color);
+  margin-top: 4px;
+}
+
+#artworkInput {
+  display: none;
+}
+
+#audioInput {
+  display: none;
+}
+
+.audio-section {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  margin-bottom: 20px;
+  align-items: stretch;
+}
+
+.audio-container {
+  flex: 1;
+}
+
+.audio-container label {
+  display: block;
+  margin-bottom: 8px;
+  font-weight: 500;
+  color: var(--text-color);
+  font-size: 14px;
+}
+
+/* dark mode override */
+body.dark-mode .audio-container label {
+    color: var(--darkmode-text-color);
+}
+
+.form-fields-container {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+}
+
+.form-group label {
+  margin-bottom: 6px;
+  font-weight: 500;
+  color: var(--text-color);
+  font-size: 14px;
+}
+/* dark mode override */
+body.dark-mode .form-group label {
+    color: var(--darkmode-text-color);
+}
+
+.required {
+  color: var(--accent-color);
+}
+
+.form-group input {
+  padding: 10px 12px;
+  border: 1px solid var(--accent-color);
+  border-radius: 4px;
+  font-size: 14px;
+  transition: border-color 0.2s;
+}
+
+.form-group input:focus {
+  outline: none;
+  border-color: var(--accent-color);
+  box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+}
+
+#podcastForm .form-group {
+  margin-bottom: 0;
+}
+
+#podcastForm > .form-group {
+  margin-bottom: 16px;
+}
+
+button[type="submit"] {
+  /*background-color: #667eea; */
+    
+  background: var(--accent-color);
+  color: white;
+  padding: 12px 24px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 16px;
+  font-weight: 500;
+  transition: background-color 0.2s;
+  width: 100%;
+  margin-top: 10px;
+}
+
+button[type="submit"]:hover {
+  background: var(--accent-color);
+}
+
+button[type="submit"]:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+}
+
+.audio-preview {
+  margin-top: 16px;
+  display: none;
+  padding: 12px;
+  background-color: var(--bg-color);
+  border-radius: 4px;
+}
+/* dark mode override */
+body.dark-mode .audio-preview {
+    background-color: var(--darkmode-bg-color);
+}
+
+.audio-preview.show {
+  display: block;
+}
+
+.audio-preview-filename {
+  font-size: 12px;
+  color: var(--text-color);
+  margin-bottom: 8px;
+  word-break: break-all;
+}
+
+/* dark mode override */
+body.dark-mode audio {
+  filter: sepia(20%) saturate(70%) grayscale(1) contrast(90%);
+}
+
+audio {
+  width: 100%;
+  height: 30px;
+}
+
+.plyr__controls {
+  background-color: var(--bg-color);
+  gap: 8px;
+}
+
+/* dark mode override */
+body.dark-mode .plyr__controls {
+  background-color: var(--darkmode-bg-color);
+}
+
+.progress-bar-container {
+  display: none;
+  margin-bottom: 20px;
+}
+
+.progress-bar-container.show {
+  display: block;
+}
+
+.progress-bar {
+  width: 100%;
+  height: 8px;
+  background-color: var(--card-color);
+  border-radius: 4px;
+  overflow: hidden;
+}
+/* dark mode override */
+body.dark-mode .progress-bar {
+    background-color: var(--darkmode-text-color);
+} 
+
+.progress-bar-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--accent-color-light), var(--accent-color));
+  width: 0%;
+  transition: width 0.3s ease;
+}
+
+.progress-label {
+  font-size: 12px;
+  color: var(--text-color);
+  margin-top: 6px;
+  text-align: center;
+}
+/* dark mode override */
+body.dark-mode .progress-label {
+    color: var(--darkmode-text-color);
+}
+
+p {
+  color: var(--text-color);
+}
+
+body.dark-mode p {
+  color: var(--darkmode-text-color);
+}
+
+a {
+  color: var(--accent-color);
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
+}

@@ -1,0 +1,15 @@
+{
+  "name": "streaming-cloud-lambda",
+  "version": "1.0.0",
+  "description": "Lambda functions for Streaming Cloud",
+  "dependencies": {
+    "@aws-sdk/client-cloudfront": "^3.x.x",
+    "@aws-sdk/client-dynamodb": "^3.x.x",
+    "@aws-sdk/client-s3": "^3.x.x",
+    "@aws-sdk/client-sfn": "^3.x.x",
+    "@aws-sdk/lib-dynamodb": "^3.x.x",
+    "@aws-sdk/s3-request-presigner": "^3.x.x",
+    "@aws-sdk/util-dynamodb": "^3.x.x",
+    "pngjs": "^7.0.0"
+  }
+}

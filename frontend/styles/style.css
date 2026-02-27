@@ -1,0 +1,483 @@
+/* ===== MOBILE FIRST (338px) ===== */
+
+:root {
+    --accent-color: #ff5500;
+    --accent-color-light: #ff8800;
+    --plyr-color-main: #ff5500;
+    --card-color: #686868;
+
+    /* light mode colors */
+    --bg-color: #f2f2f2;
+    --card-bg-color: #ffffff;
+    --text-color: #333333;
+
+    /* dark mode colors */
+    --darkmode-bg-color: #333333;
+    --darkmode-card-bg-color: #444444;
+    --darkmode-text-color: #ffffff;
+
+
+}
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    padding: 0 0px;
+    background: var(--bg-color);
+    font-family: sans-serif;
+    padding-bottom: 140px;
+    font-size: 14px;
+    line-height: 1.4;
+}
+
+/* Dark Theme overrides */
+body.dark-mode {
+    --bg-color: var(--darkmode-bg-color);
+    --text-color: var(--darkmode-text-color);
+}
+
+#feed {
+    max-width: 800px;
+    margin: 15px auto;
+    padding: 0 5px;
+}
+
+#feed-heading {
+    font-size: 22px;
+    font-weight: bold;
+    margin-bottom: 15px;
+    color: var(--accent-color);
+}
+
+/* Fixed Player - Mobile Optimized */
+#global-player {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    width: 100%;
+    background: var(--bg-color);
+    border-top: 1px solid var(--accent-color);
+    padding: 4px 4px;
+    z-index: 999;
+    color: var(--card-color);
+    font-size: 12px;
+}
+
+/* dark mode override */
+body.dark-mode #global-player a {
+    color: var(--darkmode-text-color);
+}
+
+.player-content {
+    display: flex;
+    flex-direction: column;
+    gap: 0px;
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.player-art-info-group {
+  display: flex; 
+  flex: 0 0 auto;
+  margin: 2px 0;
+  gap: inherit;
+  margin-left: 5px;
+}
+
+#player-art {
+    width: 30px;
+    height: 30px;
+    display: none;
+}
+
+#player-title {
+    font-weight: bold;
+    font-size: 12px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    color: var(--text-color);
+    margin-left: 5px;
+}
+
+#player-artist {
+    font-size: 11px;
+    color: #666;
+    margin-left: 5px;
+}
+
+audio {
+    width: 100%;
+    height: 30px;
+    /*filter: sepia(20%) saturate(70%) grayscale(1) contrast(90%); */
+}
+
+body .plyr__controls {
+    background-color: var(--bg-color) !important;
+    gap: 8px;
+}
+
+/* dark mode override */
+body.dark-mode .plyr__controls {
+    background-color: var(--darkmode-bg-color);
+}
+
+.plyr__progress {
+    display: none !important;
+}
+
+
+/* Dialog Styles */
+
+sl-dialog::part(overlay) {
+    background-color: rgba(0, 0, 0, 0.5);
+}
+
+sl-dialog::part(title) {
+    font-size: 16px;
+    padding: 5px 30px;
+    background-color: var(--accent-color);
+    color: white;
+}
+
+sl-dialog::part(header) {
+    border-color: var(--accent-color);
+    border-style: solid
+}
+sl-dialog::part(panel) {
+    background: var(--bg-color);
+    color: var(--text-color);
+}
+/*dark mode override*/
+body.dark-mode sl-dialog::part(panel) {
+    background: var(--darkmode-bg-color);
+    color: var(--darkmode-text-color);
+}
+
+#generalDialog::part(panel) {
+    max-width: none;
+    width: 100%;
+    height: auto;
+    z-index: 1001;
+    position: fixed;
+    top: 61px;
+    left: 50%;
+    transform: translateX(-50%);
+    bottom: 68px;
+}
+
+
+#generalIframe {
+    width: 100%;
+    height: 98%;
+    border: none;
+}
+
+#generalDialog::part(footer) {
+    padding: 8px 27px;
+    gap: 8px;
+    display: none;
+}
+sl-button {
+    --sl-color-primary-500: #ff8800;
+    --sl-color-primary-600: var(--accent-color);
+}
+
+sl-dialog::part(close-button) {
+    color: var(--text-color);
+}
+
+/* dark mode override */
+body.dark-mode sl-dialog::part(close-button) {
+    color: var(--darkmode-text-color);
+}
+
+
+/* Pagination Buttons */
+#pagination-controls {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+    margin: 15px 0;
+    flex-wrap: wrap;
+}
+
+#next-btn,
+#prev-btn {
+    padding: 8px 12px;
+    font-size: 12px;
+    background-color: var(--accent-color);
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    flex: 1;
+    min-width: 80px;
+}
+
+#next-btn:disabled,
+#prev-btn:disabled {
+    background-color: #ccc;
+    cursor: not-allowed;
+}
+
+/* Alert Toasts */
+.alert-main {
+    position: fixed;
+    top: 54px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 1000;
+    width: auto;
+    max-width: 85vw;
+    min-width: 100%;
+}
+
+.alert-main sl-alert {
+    margin: 0;
+    font-size: 12px;
+}
+
+/* Bookmark Cards */
+.bookmark-card {
+    display: block;
+    width: 100%;
+    margin-bottom: 10px;
+    white-space: normal;
+    overflow-wrap: break-word;
+}
+
+.bookmark-card::part(base) {
+    border: 1px solid var(--card-color);
+    border-radius: 4px;
+    background: var(--card-bg-color);
+    color: var(--text-color);
+}
+
+/* dark mode override */
+body.dark-mode .bookmark-card::part(base) {
+    background: var(--darkmode-card-bg-color);
+    color: var(--darkmode-text-color);
+}
+
+.bookmark-card::part(header) {
+    padding: 8px;
+    font-weight: bold;
+    font-size: 13px;
+}
+
+.bookmark-card::part(body) {
+    padding: 8px;
+    font-size: 12px;
+    color: var(--text-color);
+}
+
+.bookmark-card::part(footer) {
+    display: flex;
+    gap: 8px;
+    padding: 8px;
+    justify-content: flex-end;
+}
+
+.bookmark-card sl-button {
+    flex: 1;
+    --sl-font-size-small: 11px;
+    padding: 6px 8px;
+}
+
+/* ===== TABLET (min-width: 600px) ===== */
+@media (min-width: 600px) {
+    body {
+        padding: 0 0px;
+        padding-bottom: 160px;
+        font-size: 15px;
+    }
+
+    #feed {
+        margin: 20px auto;
+        padding: 0 10px;
+    }
+
+    #global-player {
+        padding: 12px 15px;
+    }
+
+    .player-content {
+        flex-direction: row;
+        align-items: center;
+        gap: 12px;
+    }
+
+    #player-art {
+        width: 45px;
+        height: 45px;
+        flex-shrink: 0;
+    }
+
+    #player-title {
+        font-size: 13px;
+    }
+
+    #player-artist {
+        font-size: 12px;
+    }
+
+    .player-info {
+        max-width: 300px;
+    }
+
+    audio {
+        height: 35px;
+    }
+
+    #generalDialog::part(panel) {
+        width: 95vw;
+
+    }
+
+    #pagination-controls {
+        margin: 20px 0;
+        gap: 15px;
+    }
+
+    #next-btn,
+    #prev-btn {
+        padding: 10px 16px;
+        font-size: 13px;
+        min-width: 100px;
+        flex: none;
+    }
+
+    .alert-main {
+        top: 62px;
+        max-width: 80vw;
+        font-size: 14px;
+        min-width: auto;
+    }
+
+    .bookmark-card::part(header) {
+        padding: 10px;
+        font-size: 14px;
+    }
+
+    .bookmark-card::part(body) {
+        padding: 10px;
+        font-size: 13px;
+    }
+
+    .bookmark-card::part(footer) {
+        padding: 10px;
+    }
+
+    .bookmark-card sl-button {
+        --sl-font-size-small: 12px;
+    }
+}
+
+/* ===== DESKTOP (min-width: 1024px) ===== */
+@media (min-width: 1024px) {
+    body {
+        padding: 0 0px;
+        padding-bottom: 180px;
+        font-size: 16px;
+        line-height: 1.6;
+    }
+
+    #feed {
+        max-width: 900px;
+        margin: 30px auto;
+        padding: 0 20px;
+    }
+
+    #global-player {
+        padding: 15px 20px;
+    }
+
+    .player-content {
+        max-width: 900px;
+        flex-direction: row;
+        align-items: center;
+        gap: 20px;
+    }
+
+    #player-art {
+        width: 50px;
+        height: 50px;
+        display: block;
+        border-radius: 4px;
+        flex-shrink: 0;
+    }
+
+    #player-title {
+        font-size: 15px;
+        flex: 1;
+    }
+
+    #player-artist {
+        font-size: 13px;
+    }
+
+    .player-info {
+        max-width: 400px;
+    }
+
+    audio {
+        flex: 1;
+        min-width: 300px;
+        height: 40px;
+    }
+
+    #generalDialog::part(panel) {
+        width: 80vw;
+        height: 80vh;
+        max-width: 1000px;
+    }
+
+    #pagination-controls {
+        margin: 30px 0;
+        gap: 20px;
+        justify-content: center;
+    }
+
+    #next-btn,
+    #prev-btn {
+        padding: 12px 20px;
+        font-size: 14px;
+        min-width: 120px;
+    }
+
+    .alert-main {
+        top: 70px;
+        max-width: 70vw;
+        font-size: 15px;
+    }
+
+    .bookmark-card {
+        margin-bottom: 15px;
+    }
+
+    .bookmark-card::part(header) {
+        padding: 12px 15px;
+        font-size: 15px;
+    }
+
+    .bookmark-card::part(body) {
+        padding: 12px 15px;
+        font-size: 14px;
+    }
+
+    .bookmark-card::part(footer) {
+        padding: 12px 15px;
+        gap: 12px;
+    }
+
+    .bookmark-card sl-button {
+        --sl-font-size-small: 13px;
+        flex: none;
+        min-width: 100px;
+    }
+}

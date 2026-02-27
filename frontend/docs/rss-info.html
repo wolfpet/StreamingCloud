@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Subscribe to Our RSS Feed</title>
+
+    <link rel="stylesheet" href="../styles/dialog_iframe.css" />
+    <link rel="stylesheet" href="../styles/style.css" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@shoelace-style/shoelace@2.15.1/cdn/themes/light.css" />
+    <script src="../scripts/apply-theme.js"></script>
+    <script type="module"
+        src="https://cdn.jsdelivr.net/npm/@shoelace-style/shoelace@2.15.1/cdn/shoelace-autoloader.js"></script>
+</head>
+
+<body class="body">
+    <div class="about-container">
+        <h1>Subscribe to Our RSS Feed</h1>
+        <p class="tagline">Stay connected with the latest uploads!</p>
+
+        <p> While this website works ok on a smartphone, it is still limited to what a web page can do. For example, the playback can be interrupted 
+            by a competing app, or the background streaming can be stopped due to the tab inactivity. 
+            Using your favorite podcast player on Android or iOS provides a much more robust experience. These players can pre-download the music, 
+            provide better background playback, and also allow to easily sync your listening progress across devices.
+            You can subscribe to our RSS feed and enjoy music from around the world. Simply copy the RSS link below and paste it into your podcast app of choice.</p>
+
+        <button class="button" onclick="copyRSSLink()">Copy RSS Link</button>
+
+ 
+    </div>
+
+
+    <!-- Shoelace alert container -->
+    <div class="alert-main">
+        <sl-alert duration="3000"></sl-alert>
+    </div>
+
+    <script>
+        const videoElement = document.querySelector('.video-container video');
+
+        // Pause video when it goes out of view or dialog is closed
+        const observerOptions = {
+            threshold: 0.1
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach((entry) => {
+                if (!entry.isIntersecting) {
+                    // Video is out of view, pause it
+                    if (videoElement) {
+                        videoElement.pause();
+                    }
+                }
+            });
+        }, observerOptions);
+
+        if (videoElement) {
+            observer.observe(videoElement);
+        }
+
+        // Also listen to visibility change (when dialog is closed/hidden)
+        document.addEventListener('visibilitychange', () => {
+            if (document.hidden && videoElement) {
+                videoElement.pause();
+            }
+        });
+
+        function copyRSSLink() {
+            const c = (window.parent && window.parent.APP_CONFIG) || window.APP_CONFIG || {};
+            const domain = c.SITE_URL || (window.location.origin);
+            const rssLink = domain + '/rss/rss.xml';
+            navigator.clipboard.writeText(rssLink).then(() => {
+                // Use parent window's showAlert if available (since this is in an iframe)
+                if (window.parent && typeof window.parent.showAlert === 'function') {
+                    window.parent.showAlert('RSS link copied to clipboard!', 'success');
+                } else {
+                    alert('RSS link copied to clipboard!');
+                }
+            }).catch(err => {
+                if (window.parent && typeof window.parent.showAlert === 'function') {
+                    window.parent.showAlert('Failed to copy RSS link.', 'danger');
+                } else {
+                    alert('Failed to copy RSS link.');
+                }
+                console.error('Failed to copy RSS link: ', err);
+            });
+        }
+    </script>
+    <script src="../scripts/general_helpers.js"></script>
+</body>
+
+</html>

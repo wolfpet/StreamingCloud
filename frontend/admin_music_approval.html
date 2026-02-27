@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Music Approval</title>
+  <link rel="stylesheet" href="styles/dialog_iframe.css" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@shoelace-style/shoelace@2.15.1/cdn/themes/light.css" />
+  <script src="scripts/apply-theme.js"></script>
+  <script type="module"
+    src="https://cdn.jsdelivr.net/npm/@shoelace-style/shoelace@2.15.1/cdn/shoelace-autoloader.js"></script>
+  <script type="module">
+    import { PendingTrack } from './scripts/pending-track.js';
+    customElements.define('pending-track', PendingTrack);
+  </script>
+  <script src="scripts/general_helpers.js" defer></script>
+  <script src="scripts/admin_music_approval.js" defer></script>
+</head>
+
+<body class="body">
+  <div class="about-container">
+    <h2>Approval Queue</h2>
+    <sl-dialog label="Confirm Action" class="dialog-confirm">
+      <strong>Are you sure you want to proceed?</strong><br />.
+      <button slot="footer" variant="default" class="cancel-btn">Cancel</button>
+      <button slot="footer" variant="primary" class="ok-btn">OK</button>
+    </sl-dialog>
+    <sl-dialog label="Confirmirmation" class="dialog-response">            `            
+    </sl-dialog>
+    <ul class="philosophy-list" id="pending-music-list">
+      <!-- Pending tracks will be dynamically inserted here -->
+    </ul>   
+  </div>
+  <div class="back-button-section">
+    <button class="back-button" onclick="window.history.back()">← Back</button>
+  </div>
+</body>
+
+</html>

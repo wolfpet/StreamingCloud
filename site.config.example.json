@@ -1,0 +1,63 @@
+{
+  "site": {
+    "domainName": "example.com",
+    "title": "Streaming Cloud",
+    "tagline": "Community-driven music streaming",
+    "playerSubtitle": "Hit Play and enjoy the music!",
+    "contactEmail": "contact@example.com",
+    "contentNoun": "Track"
+  },
+
+  "brand": {
+    "accentColor": "#1e98d7",
+    "accentColorLight": "#7dc7ed",
+    "consoleBannerEmoji": "🎵"
+  },
+
+  "seo": {
+    "googleSiteVerification": ""
+  },
+
+  "cognito": {
+    "refreshTokenValidityDays": 365,
+    "minPasswordLength": 7
+  },
+
+  "rss": {
+    "title": "Streaming Cloud",
+    "description": "A community-driven music streaming platform.",
+    "author": "My Organization",
+    "category": "Music",
+    "language": "en-us",
+    "scheduleMinutes": 120,
+    "feedLimit": 50
+  },
+
+  "email": {
+    "provider": "none",
+    "mxRecords": [],
+    "spfRecord": ""
+  },
+
+  "lambda": {
+    "volumeLevelsMemoryMb": 3008
+  },
+
+  "upload": {
+    "presignedUrlExpirySeconds": 3600
+  },
+
+  "playback": {
+    "historyTtlDays": 100,
+    "expiredMarkerTtlDays": 7
+  },
+
+  "messages": {
+    "maxLength": 5000
+  },
+
+  "waveform": {
+    "width": 800,
+    "height": 100
+  }
+}

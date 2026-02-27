@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Settings</title>
+  <link rel="stylesheet" href="styles/dialog_iframe.css" />
+  <script src="scripts/apply-theme.js"></script>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@shoelace-style/shoelace@2.15.1/cdn/themes/light.css" />
+  <script type="module"
+    src="https://cdn.jsdelivr.net/npm/@shoelace-style/shoelace@2.15.1/cdn/shoelace-autoloader.js"></script>
+  <script src="scripts/general_helpers.js" defer></script>
+  <script src="scripts/settings.js" defer></script>
+</head>
+
+<body class="body">
+  <div class="about-container">
+    <h2>Appearance</h2>
+    <ul class="philosophy-list">
+      <li><strong></strong><sl-switch size="large">Dark Mode</sl-switch></li>
+    </ul>
+    <h2>Music Playback</h2>
+    <ul class="philosophy-list">
+      <li><strong></strong><sl-switch size="large">Auto play</sl-switch></li>
+      <li><strong></strong><sl-switch size="large">Sync across devices</sl-switch></li>
+      <li><strong></strong><button class="button" onclick="window.parent.showConfirmationDialog('<strong>Are you sure you want to proceed??</strong><br>The playback history will be reset and it can\'t be undone.', async () => { await resetPlayHistory(); })">Reset Play History</button>
+      </li>
+    </ul>
+    <div id="admin-tools-container" class="about-container">
+      <h2>Admin Tools</h2>
+      <ul class="philosophy-list">
+        <!-- Admin tools will be dynamically inserted here based on user role -->
+      </ul>
+    </div>
+  </div>
+</body>
+
+</html>

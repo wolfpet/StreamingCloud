@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Contact Us</title>
+  <link rel="stylesheet" href="../styles/dialog_iframe.css" />  <script src="../scripts/apply-theme.js"></script>  <script src="../scripts/contact.js" defer></script>  
+</head>
+<body class="body">
+  <div class="about-container">
+    <h1>Contact Us</h1>
+    <p class="tagline">Get In Touch</p>
+    
+    <p>Have a question, suggestion, or copyright concern? We'd love to hear from you. Please fill out the form below and we'll get back to you as soon as possible.</p>
+    
+    <h2>General Inquiry Form</h2>
+    <form id="contactForm">
+      <div class="form-group">
+        <label for="name">Name *</label>
+        <input type="text" id="name" name="name" required placeholder="Your name">
+      </div>
+      
+      <div class="form-group">
+        <label for="email">Email *</label>
+        <input type="email" id="email" name="email" required placeholder="Your email address">
+      </div>
+      
+      <div class="form-group">
+        <label for="message">Message *</label>
+        <textarea id="message" name="message" required placeholder="Your message or inquiry"></textarea>
+      </div>
+      
+      <button type="submit" class="form-submit">Send Message</button>
+    </form>
+    
+    
+    <h2>Email</h2>
+    <p>You can also reach us directly at <strong><span id="contact-email">contact@example.com</span></strong></p>
+    
+    <h2>Copyright & Takedown Requests</h2>
+    
+    <h3>Report Copyright Infringement</h3>
+    <p>If you are a rights holder and believe your work has been uploaded to our platform without authorization, please provide the following information so we can take immediate action.</p>
+    
+    <form id="takedownForm">
+      <div class="form-group">
+        <label for="fullName">Full Name / Organization *</label>
+        <input type="text" id="fullName" name="fullName" required placeholder="Your name or organization">
+      </div>
+      
+      <div class="form-group">
+        <label for="takedownEmail">Email Address *</label>
+        <input type="email" id="takedownEmail" name="takedownEmail" required placeholder="Your email address">
+      </div>
+      
+      <div class="form-group">
+        <label for="relationship">Relationship to the Work *</label>
+        <input type="text" id="relationship" name="relationship" required placeholder="e.g., 'I am the artist,' 'I am the label owner'">
+      </div>
+      
+      <div class="form-group">
+        <label for="infringingLink">Link to Infringing Material *</label>
+        <input type="url" id="infringingLink" name="infringingLink" required placeholder="https://example.com/infringing-track">
+      </div>
+      
+      <div class="form-group">
+        <label for="evidenceOfOwnership">Evidence of Ownership *</label>
+        <textarea id="evidenceOfOwnership" name="evidenceOfOwnership" required placeholder="Link to the original release on Bandcamp, Beatport, or your official website"></textarea>
+      </div>
+      
+      <div class="form-group">
+        <label class="checkbox-label">
+          <input type="checkbox" id="goodFaith" name="goodFaith" required>
+          <span>I confirm that I have a good faith belief that the use of the material in the manner complained of is not authorized by the copyright owner, its agent, or the law. *</span>
+        </label>
+      </div>
+      
+      <div class="form-group">
+        <label for="signature">Electronic Signature (Type your full name) *</label>
+        <input type="text" id="signature" name="signature" required placeholder="Your full name">
+      </div>
+      
+      <button type="submit" class="form-submit">Submit Takedown Request</button>
+    </form>
+    
+    <div class="back-button-section">
+      <button class="back-button" onclick="window.history.back()">← Back</button>
+    </div>
+  </div>
+
+  <script src="../scripts/config.js"></script>
+
+</body>
+</html>

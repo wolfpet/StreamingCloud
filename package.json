@@ -1,0 +1,26 @@
+{
+  "name": "streaming-cloud",
+  "version": "0.1.0",
+  "bin": {
+    "streaming-cloud": "bin/streaming-cloud.js"
+  },
+  "scripts": {
+    "build": "echo \"The build step is not required when using JavaScript!\" && exit 0",
+    "cdk": "cdk",
+    "test": "jest"
+  },
+  "devDependencies": {
+    "aws-cdk": "2.1100.3",
+    "jest": "^30"
+  },
+  "dependencies": {
+    "@aws-sdk/client-dynamodb": "^3.972.0",
+    "@aws-sdk/client-s3": "^3.972.0",
+    "@aws-sdk/client-sfn": "^3.972.0",
+    "@aws-sdk/lib-dynamodb": "^3.972.0",
+    "aws-cdk-lib": "^2.232.2",
+    "pngjs": "^7.0.0",
+    "constructs": "^10.0.0",
+    "plyr": "^3.8.4"
+  }
+}

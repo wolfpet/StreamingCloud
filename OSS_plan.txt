@@ -1,0 +1,85 @@
+Streaming Cloud — Open Source Release Plan
+
+Goal: Prepare Streaming Cloud (upstream-first, config-layer refactor from techno-podcasts) for public open-source release.
+
+Priority actions (high → low)
+
+1) Repository hygiene & history cleanup (High)
+- Ensure build/artifact files are not tracked (cdk.out, .aws-sam, etc.)
+- If sensitive build artifacts exist in history, remove them with `git-filter-repo` or BFG and rotate any exposed secrets
+- Confirm `.gitignore` contains `cdk.out/` and other runtime-only files
+- Owner: Maintainer
+- Est. effort: 1–2 hours
+
+2) Secrets & sensitive data audit (High)
+- Full repo scan for secrets (private keys, AWS keys, tokens). Use automated scanners (gitleaks, trufflehog)
+- Confirm deploy scripts never commit secrets; ensure `site.config.json` is listed in `.gitignore` (it currently is)
+- Owner: Maintainer
+- Est. effort: 1–2 hours
+
+3) Hardening secret handling in CDK (High)
+- Replace any `SecretValue.unsafePlainText(...)` or env-inlined secrets with SSM/SecretsManager references in CDK constructs or pass ARNs
+- Document required SSM parameter names and required IAM permissions in README
+- Owner: Maintainer/Dev
+- Est. effort: 1–3 hours
+
+4) License and third-party binaries (High)
+- LICENSE is BSD-2-Clause — OK for code
+- FFmpeg binaries bundled under `ffmpeg-layer/` are GPLv3. Add explicit README notice explaining redistribution obligations and provide alternative: instructions to build/publish your own Lambda layer (script already present)
+- Consider removing GPL binaries from repo and instruct users to run `create-ffmpeg-layer.ps1` to provide their own binary to avoid GPL redistribution obligations
+- Owner: Maintainer/Legal
+- Est. effort: 1–2 hours
+
+5) Dependencies & security (High)
+- Run `npm audit` and fixable updates; update `package.json` deps to non-vulnerable releases where compatible
+- Add automated dependency updates (Dependabot or Renovate)
+- Owner: Maintainer/Dev
+- Est. effort: 1–4 hours
+
+6) Tests, CI, and automated checks (High)
+- Fix or add Jest tests; ensure `npm test` is meaningful (Jest currently finds no tests)
+- Add GitHub Actions to run `npm ci`, `npm test`, and `npm audit` on PRs
+- Add a security check (gitleaks) to CI to block secrets
+- Owner: Maintainer/Dev
+- Est. effort: 2–6 hours
+
+7) Docs and contributor experience (Medium)
+- Add `CONTRIBUTING.md`, `SECURITY.md`, `CODE_OF_CONDUCT.md`, `MAINTAINERS.md` and issue/PR templates
+- Update README: remove legacy brand references, explicit deploy steps (SSM param names), FFmpeg GPL note, privacy/legal guidance
+- Provide a minimal `site.config.example.json` that is safe for public use (already exists)
+- Owner: Maintainer
+- Est. effort: 1–3 hours
+
+8) Release process and metadata (Medium)
+- Add `package.json` metadata (repository, bugs, homepage), add CHANGELOG and release checklist
+- Define versioning strategy (SemVer) and tagging procedure
+- Owner: Maintainer
+- Est. effort: 1–2 hours
+
+9) Staging deployment & end-to-end verification (Medium)
+- Create a staging AWS account or isolated stack to deploy and verify: signup, upload, play, RSS generation, waveform creation
+- Verify CloudFront, Cognito (Google OAuth redirect), and FFmpeg layer function correctly
+- Owner: Maintainer/Dev
+- Est. effort: 2–4 hours
+
+10) Community & governance (Low)
+- Create issue templates for bugs/feature requests/security
+- Add maintainers and CODEOWNERS if appropriate
+- Plan first release announcement and community channels
+- Owner: Maintainer
+- Est. effort: 1–2 hours
+
+Pre-release checklist (before publishing repo public):
+- Confirm no secrets in repo or history
+- Confirm third-party license obligations (FFmpeg GPL) are documented and binaries are handled correctly
+- CI passing (tests + audit + secret scanning)
+- Basic contributor docs present (`CONTRIBUTING.md`, `SECURITY.md`, `CODE_OF_CONDUCT.md`)
+- Staging deploy successful and smoke tests passing
+
+Recommended next steps I can take for you (pick any):
+- Generate the `CONTRIBUTING.md`, `SECURITY.md`, `CODE_OF_CONDUCT.md`, and CI workflow files (I will not modify existing files unless you permit)
+- Run automated secret scan and produce a report (gitleaks)
+- Run `npm audit fix` and prepare dependency bumps in a branch
+- Prepare git commands and step-by-step guide to purge `cdk.out` from repo history if needed
+
+Saved: OSS_plan.txt

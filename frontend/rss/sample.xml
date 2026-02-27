@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0" xmlns:itunes="http://www.itunes.com/dtds/podcast-1.0.dtd" xmlns:content="http://purl.org/rss/1.0/modules/content/">
+  <channel>
+    <title>Streaming Cloud</title>
+    <link>https://example.com</link>
+    <description>Community-driven music streaming platform.</description>
+    <itunes:author>Streaming Cloud</itunes:author>
+    <itunes:category text="Music"/>
+    <itunes:image href="https://example.com/img/rss-logo.png"/>
+    <language>en-us</language>
+    <item>
+      <title>Sample Podcast Episode</title>
+      <description>This is a sample podcast episode for demonstration purposes.</description>
+      <pubDate>Mon, 01 Jan 2024 10:00:00 GMT</pubDate>
+      <enclosure url="https://example.com/uploads/sample-episode.mp3" length="12345678" type="audio/mpeg"/>
+      <itunes:duration>1:00:00</itunes:duration>
+    </item>
+  </channel>
+</rss>

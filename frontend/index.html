@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Streaming Cloud</title>
+  <link rel="apple-touch-icon" sizes="180x180" href="img/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="img/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="img/favicon-16x16.png">
+
+  <link rel="stylesheet" href="styles/style.css" />
+  <link rel="stylesheet" href="plyr/plyr.css" />
+  <link rel="stylesheet" href="styles/header.css" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@shoelace-style/shoelace@2.15.1/cdn/themes/light.css" />
+  <!-- <script type="module" src="https://cdn.jsdelivr.net/npm/@shoelace-style/shoelace@2.15.1/cdn/shoelace-autoloader.js"></script> -->
+  <script type="module">import { setBasePath } from 'https://cdn.jsdelivr.net/npm/@shoelace-style/shoelace@2.15.1/cdn/shoelace.js';  setBasePath('https://cdn.jsdelivr.net/npm/@shoelace-style/shoelace@2.15.1/cdn/');</script>
+  <script type="module" src="scripts/login_component.js"></script>
+  <script type="module" src="scripts/signup_component.js"></script>
+  <script type="module" src="scripts/soundcloud-track.js"></script>
+  <script src="scripts/env.js"></script>
+  <script src="scripts/config.js"></script>
+  <script src="scripts/apply-theme.js"></script>
+  <script src="scripts/auth.js" defer></script>
+  <script src="scripts/menu.js" defer></script>
+  <script src="scripts/fetch_podcasts.js" defer></script>
+  <script src="scripts/search_client.js" defer></script>
+  <script src="plyr/plyr.js" defer></script>
+  <script src="scripts/general_helpers.js" defer></script>
+  <script src="scripts/play.js" defer></script>
+  <script src="scripts/load_podcasts.js" defer></script>
+  <script src="scripts/my_podcasts_client.js" defer></script>
+  <script>
+    // Console banner — uses APP_CONFIG values injected by CDK at deploy time
+    window.addEventListener('DOMContentLoaded', () => {
+      const c = window.APP_CONFIG || {};
+      const name = c.SITE_NAME || 'Streaming Cloud';
+      const emoji = c.CONSOLE_BANNER_EMOJI || '🎵';
+      const bg = c.ACCENT_COLOR || '#ff5500';
+      console.log(`\n%c${name}  ${emoji} `, `color:#fff; background:${bg}; font-size:2.5rem; padding:0.15rem 0.25rem; margin: 1rem auto; font-family: Rockwell; border: 1px solid #fff; border-radius: 4px;font-weight: bold; text-shadow: 1px 1px 1px #bbb;`);
+    });
+  </script>
+
+
+
+</head>
+
+<body>
+  <header class="main-header">
+    <div class="header-container">
+      <!-- Logo -->
+      <div class="logo-icon-div" id="logo-icon-div"><img src="img/logo-180x180.png" alt="Streaming Cloud"
+          class="logo-img" /></div>
+      <sl-tooltip content="Home" placement="bottom">
+        <div class="logo" id="logo">Streaming Cloud</div>
+      </sl-tooltip>
+
+      <!-- Navigation -->
+      <nav class="nav-links" id="mobile-menu">
+        <!--
+        <sl-tooltip class="menu-tooltips" content="Bookmarks" placement="bottom"><a href="#" class="memuLabels"
+            id="bookmarks" data-label="Bookmarks"><svg viewBox="0 0 24 24" preserveAspectRatio="xMidYMid meet"
+              class="menuIcons">
+              <g class="style-scope iron-icon">
+                <path fill="white" d="M17 3H7c-1.1 0-1.99.9-1.99 2L5 21l7-3 7 3V5c0-1.1-.9-2-2-2z"
+                  class="style-scope iron-icon"></path>
+              </g>
+            </svg><span class="nav-links-text">Bookmarks</span></a>
+        </sl-tooltip>
+        -->
+        <sl-tooltip class="menu-tooltips" content="Upload Podcast" placement="bottom"><a href="#" class="memuLabels"
+            id="uploadLink" data-label="Upload Podcast"><svg viewBox="0 0 24 24" preserveAspectRatio="xMidYMid meet"
+              class="menuIcons">
+              <g class="style-scope iron-icon">
+                <path fill="white"
+                  d="M19.35 10.04C18.67 6.59 15.64 4 12 4 9.11 4 6.6 5.64 5.35 8.04 2.34 8.36 0 10.91 0 14c0 3.31 2.69 6 6 6h13c2.76 0 5-2.24 5-5 0-2.64-2.05-4.78-4.65-4.96zM14 13v4h-4v-4H7l5-5 5 5h-3z"
+                  class="style-scope iron-icon"></path>
+              </g>
+            </svg><span class="nav-links-text">Upload</span></a></sl-tooltip>
+        <sl-tooltip class="menu-tooltips" content="RSS Feed" placement="bottom"><a href="#" class="memuLabels"
+            id="rssLink" data-label="RSS Feed"><svg fill="white" viewBox="0 0 16 16" preserveAspectRatio="xMidYMid meet"
+              class="menuIcons">
+              <path
+                d="M5.5 12a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0m-3-8.5a1 1 0 0 1 1-1c5.523 0 10 4.477 10 10a1 1 0 1 1-2 0 8 8 0 0 0-8-8 1 1 0 0 1-1-1m0 4a1 1 0 0 1 1-1 6 6 0 0 1 6 6 1 1 0 1 1-2 0 4 4 0 0 0-4-4 1 1 0 0 1-1-1" />
+            </svg><span class="nav-links-text">RSS Feed</span></a></sl-tooltip>
+        <sl-tooltip class="menu-tooltips" content="About" placement="bottom"><a href="#"
+            class="memuLabels" id="aboutLink" data-label="About"><svg viewBox="0 0 24 24"
+              preserveAspectRatio="xMidYMid meet" class="menuIcons">
+              <g class="style-scope iron-icon">
+                <path fill="white"
+                  d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"
+                  class="style-scope iron-icon"></path>
+              </g>
+            </svg><span class="nav-links-text">About</span></a></sl-tooltip>
+      </nav>
+
+      <div class="search-bar">
+        <input type="text" placeholder="Search..." id="searchInput" />
+      </div>
+
+      <div class="account-menu">
+        <sl-tooltip id="avatarTooltip" content="" placement="left">
+          <sl-avatar id="userAvatar" label="User avatar"></sl-avatar>
+        </sl-tooltip>
+        <sl-menu id="accountMenuDropdown" style="display: none;">
+          <sl-menu-item>test</sl-menu-item>
+        </sl-menu>
+      </div>
+
+      <!-- Hamburger Button -->
+      <button title="Toggle menu" class="hamburger" id="hamburger-btn">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+    </div>
+  </header>
+
+
+  <!-- Reusable General Purpose Dialog -->
+  <sl-dialog id="generalDialog" label="">
+    <iframe id="generalIframe" src=""></iframe>
+    <!--<sl-button slot="footer" variant="primary" onclick="document.getElementById('generalDialog').hide()">Close</sl-button> -->
+  </sl-dialog>
+
+  <!-- Main OK/Cancel Dialog -->
+  <sl-dialog id="confirmationDialog" label="Confirmation">
+    <p><strong>Confirmation:</strong> Are you sure?</p>
+    <sl-button class="cancel-btn" variant="default" slot="footer">Cancel</sl-button>
+    <sl-button class="ok-btn" variant="primary" slot="footer">OK</sl-button>    
+  </sl-dialog>
+
+  <!-- Reusable MessageBox-->
+  <sl-dialog label="Message" class="message-box">
+    <p>Message text</p>
+    <sl-button class="ok-btn" variant="primary" slot="footer">OK</sl-button>
+  </sl-dialog>
+
+  <!-- Main Alert -->
+  <div class="alert-main">
+    <!--<sl-button variant="primary">Show Alert</sl-button>    -->
+    <sl-alert variant="primary" duration="3000" closable>
+      <sl-icon slot="icon" name="info-circle"></sl-icon>
+      Placeholder for alerts
+    </sl-alert>
+  </div>
+
+  <!-- Podcast feed -->
+  <div id="feed">
+    <h2 id="feed-heading">Recent Uploads</h2>
+    <!-- Podcast list will be loaded here -->
+    <div id="pagination-controls" style="margin-top: 20px; display: flex; gap: 10px; justify-content: center;">
+      <button id="prev-btn">Previous</button>
+      <button id="next-btn">Next</button> 
+    </div>
+  </div>
+
+  <!-- Global Player -->
+  <footer id="global-player">
+    <div class="player-content">
+      <div class="player-art-info-group">
+        <img id="player-art" src="img/Player_logo-192x192.png" alt="Player logo" />
+        <div class="player-info">
+          <div id="player-title">Welcome</div>
+          <div id="player-artist">Hit Play and enjoy the music!</div>
+        </div>
+      </div>
+      <audio id="main-audio" controls playsinline></audio>
+      <div><a href="docs/privacy_policy.html">Privacy Policy</a></div>
+    </div>
+  </footer>
+
+  <template id="auth-dialog-template">
+    <login-component></login-component>
+    <div class="separator">
+      <hr><span>OR</span>
+      <hr>
+    </div>
+    <sl-button class="login-google" variant="primary">Login with Google</sl-button>
+    <div class="separator">
+      <hr><span>OR</span>
+      <hr>
+    </div>
+    <sl-button class="sign-up" variant="success">Sign Up</sl-button>
+  </template>
+</body>
+
+<script>
+  // Apply site config values from APP_CONFIG (injected by CDK via env.js)
+  window.addEventListener('DOMContentLoaded', () => {
+    const c = window.APP_CONFIG || {};
+    const siteName = c.SITE_NAME || 'Streaming Cloud';
+
+    // Page title
+    document.title = siteName;
+
+    // Logo text
+    const logo = document.getElementById('logo');
+    if (logo) logo.textContent = siteName;
+
+    // Logo alt text
+    const logoImg = document.querySelector('.logo-img');
+    if (logoImg) logoImg.alt = siteName;
+
+    // Player default text (only if nothing is playing)
+    const playerTitle = document.getElementById('player-title');
+    const playerArtist = document.getElementById('player-artist');
+    if (playerTitle && playerTitle.textContent === 'Welcome') {
+      playerTitle.textContent = c.SITE_TAGLINE || siteName;
+    }
+    if (playerArtist && playerArtist.textContent === 'Hit Play and enjoy the music!') {
+      playerArtist.textContent = c.SITE_PLAYER_SUBTITLE || 'Hit Play and enjoy the music!';
+    }
+
+    // Google site verification (inject meta tag if configured)
+    if (c.GOOGLE_SITE_VERIFICATION) {
+      const meta = document.createElement('meta');
+      meta.name = 'google-site-verification';
+      meta.content = c.GOOGLE_SITE_VERIFICATION;
+      document.head.appendChild(meta);
+    }
+  });
+</script>
+
+</html>

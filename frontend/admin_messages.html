@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Messages</title>
+  <link rel="stylesheet" href="styles/dialog_iframe.css" />  <script src="scripts/apply-theme.js"></script>  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@shoelace-style/shoelace@2.15.1/cdn/themes/light.css" />
+  <script type="module"
+    src="https://cdn.jsdelivr.net/npm/@shoelace-style/shoelace@2.15.1/cdn/shoelace-autoloader.js"></script>
+  <script src="scripts/general_helpers.js" defer></script>
+  <script src="scripts/admin_messages.js" defer></script>
+</head>
+
+<body class="body">
+  <div class="about-container">
+    <h2>Messages</h2>
+
+    <sl-dialog label="Confirm Action" class="dialog-confirm">
+      <strong>Are you sure you want to proceed?</strong><br />.
+      <button slot="footer" variant="default" class="cancel-btn">Cancel</button>
+      <button slot="footer" variant="primary" class="ok-btn">OK</button>
+    </sl-dialog>
+    <sl-dialog label="Confirmation" class="dialog-response">            
+    </sl-dialog>
+    <div class="user-list-container" id="user-list">
+      <!-- User table will be dynamically inserted here -->
+    </div>
+   
+  </div>
+  <div class="back-button-section">
+    <button class="back-button" onclick="window.history.back()">← Back</button>
+  </div>
+</body>
+
+</html>
