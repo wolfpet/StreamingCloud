@@ -2,6 +2,21 @@
 
 Open-source, self-hosted music streaming platform built on AWS. Upload tracks, stream audio, manage users, and publish an RSS feed — all from your own domain.
 
+**We do we need it?:** 
+Hi, I'm Peter Wolf, the founder of Streaming Cloud. I've been making and DJing techno music for quite some time. I also have a life long career in software development. As a DJ and producer, I felt that I don't have much choice on where to host my music. Most streaming platforms (Apple, Spotify, Amazon, etc.) are designed for serving (or selling) individual songs, which is perfectly fine for top 40 music. Techno, however, is meant to be mixed in multi-hour DJ sets. Listening to individual techno tracks makes very little sense. I'm sure this applies to some other genres of music as well. What's left? Youtube started interrupting sets with ads with is the most awful experience: tt's like turning on the lights on the dance floor in the middle of the party night. Not good. SoundCloud allows DJ sets, but you either limited to a couple of sets or it gets expensive, not to mention that your set will be lost among millions of short tracks. MixCloud? Well, I just don't like it. So... I guess this is it? That gave me sufficient motivation to build a platform that...
+
+- Free and Open Source
+- Highly customizable
+- Hosting that costs only a tiny fraction of what premium subscriptions would cost per user.
+- Infinitely scalable using the modern cloud tech. 1 listener or a million -- it won't slow down or crash.
+- Works well on computers and phones natively, or via the 3-rd party apps using an open standard protocol (RSS)
+- Not bloated with useless social media hooks. "Less is more" not only applies to techno music but also to software. As a side effect of that it should deter people with a wrong motivation: the lack of counters for plays, likes and shares, lack of comments and such would only retain the uploaders who truly love sharing their craft and not those who chase validation in numbers. Zero ego platform, basically. 
+- Not every set is great so the host (you) should have an (optional) way to approve or reject someone's  upload.
+- You can resume where you left off, across devices. Especially important for long DJ sets!
+- Looks pretty and delightful to use.
+
+![Alt text](test/StreamingCloud.jpg)
+
 **Live features:** audio player with waveform visualization, user accounts (email + Google login), bookmarks, search, RSS podcast feed, admin panel for user and content management.
 
 ## Architecture Overview
