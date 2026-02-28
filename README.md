@@ -2,7 +2,7 @@
 
 Open-source, self-hosted music streaming platform built on AWS. Upload tracks, stream audio, manage users, and publish an RSS feed — all from your own domain.
 
-# We do we need it?
+# Who needs it and why?
 
 Hi, I'm Peter Wolf, the founder of Streaming Cloud. I've been making and DJing techno music for quite some time. I also have a life long career in software development. As a DJ and producer, I felt that I don't have much choice on where to host my music. Most streaming platforms (Apple, Spotify, Amazon, etc.) are designed for serving (or selling) individual songs, which is perfectly fine for top 40 music. Techno, however, is meant to be mixed in multi-hour DJ sets. Listening to individual techno tracks makes very little sense. I'm sure this applies to some other genres of music as well. What's left? Youtube started interrupting sets with ads with is the most awful experience: tt's like turning on the lights on the dance floor in the middle of the party night. Not good. SoundCloud allows DJ sets, but you either limited to a couple of sets or it gets expensive, not to mention that your set will be lost among millions of short tracks. MixCloud? Well, I just don't like it. So... I guess this is it? That gave me sufficient motivation to build a platform that...
 
