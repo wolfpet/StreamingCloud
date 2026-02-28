@@ -1,6 +1,7 @@
 // Set the API endpoint on window to avoid duplicate declarations
 if (!window.API_ENDPOINT) {
-  window.API_ENDPOINT = window.APP_CONFIG?.API_URL;
+  const config = window.APP_CONFIG || (window.parent && window.parent.APP_CONFIG) || {};
+  window.API_ENDPOINT = config.API_URL;
   if (!window.API_ENDPOINT) {
     console.error('APP_CONFIG.API_URL is not defined. Please check config.js');
   }
