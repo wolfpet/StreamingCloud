@@ -3,6 +3,7 @@ const { DynamoDBClient } = require("@aws-sdk/client-dynamodb");
 const {
   DynamoDBDocumentClient,
   GetCommand,
+  PutCommand,
 } = require("@aws-sdk/lib-dynamodb");
 
 const client = new DynamoDBClient({});
@@ -44,7 +45,39 @@ exports.handler = async (event) => {
     );
 
     if (!response.Item) {
-      return formatResponse(404, { error: "User not found" });
+      // User not in table — auto-create for federated (Google) users
+      // who may have missed the PostConfirmation trigger
+      console.log(`User not found in table, auto-creating: ${email}`);
+      const givenName = claims.given_name || claims.name || "User";
+      const picture = claims.picture || null;
+
+      const newUser = {
+        email: email,
+        given_name: givenName,
+        picture: picture,
+        admin: false,
+        approver: false,
+        uploadPreapproval: false,
+        createdAt: new Date().toISOString(),
+      };
+
+      await docClient.send(
+        new PutCommand({
+          TableName: tableName,
+          Item: newUser,
+          ConditionExpression: "attribute_not_exists(email)",
+        })
+      );
+
+      console.log(`Auto-created user: ${email}`);
+
+      const attributes = {
+        email: newUser.email,
+        admin: newUser.admin,
+        approver: newUser.approver,
+        uploadPreapproval: newUser.uploadPreapproval,
+      };
+      return formatResponse(200, attributes);
     }
 
     const user = response.Item;

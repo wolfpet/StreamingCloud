@@ -2,9 +2,17 @@
 
 const cdk = require('aws-cdk-lib/core');
 const { StreamingCloudStack } = require('../lib/streaming-cloud-stack');
+const { loadSiteConfig } = require('../lib/load-site-config');
+
+// Derive a unique stack name from the domain so that multiple deployments
+// (e.g. techno-podcasts.com vs test.techno-podcasts.com) never share the
+// same CDK support stack in us-east-1 and thus never clobber each other's
+// Lambda@Edge functions.
+const siteConfig = loadSiteConfig();
+const stackName = `StreamingCloudStack-${siteConfig._derived.domainPrefix}`;
 
 const app = new cdk.App();
-new StreamingCloudStack(app, 'StreamingCloudStack', {
+new StreamingCloudStack(app, stackName, {
   /* If you don't specify 'env', this stack will be environment-agnostic.
    * Account/Region-dependent features and context lookups will not work,
    * but a single synthesized template can be deployed anywhere. */

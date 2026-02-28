@@ -1,4 +1,5 @@
 // lambda/get_music.js
+// Updated: force redeploy with fixed node_modules
 const { DynamoDBClient, QueryCommand } = require("@aws-sdk/client-dynamodb");
 const { unmarshall } = require("@aws-sdk/util-dynamodb");
 
