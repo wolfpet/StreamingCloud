@@ -21,6 +21,7 @@ exports.handler = async (event) => {
         given_name: givenName,
         picture: picture,
         admin: false,
+        approver: false,
         uploadPreapproval: false,        
         createdAt: new Date().toISOString(),
       }
