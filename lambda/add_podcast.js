@@ -131,13 +131,10 @@ exports.handler = async (event) => {
         }),
       };
     }
-    // check if the user has preapproval to add podcasts
-    let podcastStatus = "pending";
-
+    // check if the user has preapproval to add podcasts    
+    let podcastStatus = process.env.APPROVAL_REQUIRED === 'true' ? "pending" : "approved";
     const isPreapproved = await checkUserInPodcastUsers(podcastEmail);
-    if (isPreapproved) {
-      podcastStatus = "approved";
-    }
+    if (isPreapproved) { podcastStatus = "approved"; }
     
     const podcastId = `podcast-${Date.now()}`;
 

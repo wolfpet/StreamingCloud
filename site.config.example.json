@@ -13,6 +13,10 @@
     "accentColorLight": "#7dc7ed",
     "consoleBannerEmoji": "🎵"
   },
+  
+  "administration": {
+    "approvalRequired": true
+  },
 
   "seo": {
     "googleSiteVerification": ""
