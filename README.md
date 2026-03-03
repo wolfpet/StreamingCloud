@@ -102,12 +102,20 @@ Streaming Cloud uses Google OAuth for social login. You need to create credentia
 2. Create a new project (or select an existing one)
 3. Go to **APIs & Services → Credentials → Create Credentials → OAuth client ID**
 4. Choose **Web application**
-5. Under **Authorized redirect URIs**, add:
+5. Under **Authorized JavaScript origins**, add:
+   ```
+   https://YOUR_DOMAIN.com
+   ```
+   (Replace `YOUR_DOMAIN.com` with your actual domain — e.g. `mysite.com`)
+6. Under **Authorized redirect URIs**, add:
    ```
    https://YOUR_DOMAIN_PREFIX.auth.us-east-1.amazoncognito.com/oauth2/idpresponse
+   https://YOUR_DOMAIN.com
+   https://YOUR_DOMAIN.com/
    ```
-   (Replace `YOUR_DOMAIN_PREFIX` with your domain name minus the TLD — e.g. for `mysite.com` use `mysite`)
-6. Save and note your **Client ID** and **Client Secret**
+   - Replace `YOUR_DOMAIN_PREFIX` with your domain name with dots replaced by hyphens and TLD removed (e.g., `mysite.com` → `mysite`, `test.mysite.com` → `test-mysite`)
+   - Replace `YOUR_DOMAIN.com` with your actual domain
+7. Save and note your **Client ID** and **Client Secret**
 
 #### 3b. Store credentials in AWS Systems Manager Parameter Store
 
@@ -144,14 +152,23 @@ mkdir -p lambda-layer-final/bin
 cp ffmpeg-layer/bin/ffmpeg-7.0.2-amd64-static/ffmpeg lambda-layer-final/bin/
 cp ffmpeg-layer/bin/ffmpeg-7.0.2-amd64-static/ffprobe lambda-layer-final/bin/
 cd lambda-layer-final && zip -r ../ffmpeg-layer.zip bin/ && cd ..
+
+# The layer is >70MB, so we need to upload via S3
+BUCKET_NAME="ffmpeg-layer-temp-$(date +%s)"
+aws s3 mb s3://$BUCKET_NAME --region us-east-1
+aws s3 cp ffmpeg-layer.zip s3://$BUCKET_NAME/ffmpeg-layer.zip
 aws lambda publish-layer-version \
   --layer-name ffmpeg-layer \
-  --zip-file fileb://ffmpeg-layer.zip \
+  --content S3Bucket=$BUCKET_NAME,S3Key=ffmpeg-layer.zip \
   --compatible-runtimes nodejs24.x \
   --region us-east-1
+
+# Optional: Clean up the temporary bucket
+aws s3 rm s3://$BUCKET_NAME/ffmpeg-layer.zip
+aws s3 rb s3://$BUCKET_NAME
 ```
 
-> **Note:** The layer must be published in `us-east-1` because Lambda@Edge functions run there.
+> **Note:** The layer must be published in `us-east-1` because Lambda@Edge functions run there. The FFmpeg binaries exceed the 70MB direct upload limit, so we upload via S3 first.
 
 ### Step 5 — Set up your domain in Route 53
 
