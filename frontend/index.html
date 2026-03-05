@@ -15,8 +15,6 @@
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@shoelace-style/shoelace@2.15.1/cdn/themes/light.css" />
   <!-- <script type="module" src="https://cdn.jsdelivr.net/npm/@shoelace-style/shoelace@2.15.1/cdn/shoelace-autoloader.js"></script> -->
   <script type="module">import { setBasePath } from 'https://cdn.jsdelivr.net/npm/@shoelace-style/shoelace@2.15.1/cdn/shoelace.js';  setBasePath('https://cdn.jsdelivr.net/npm/@shoelace-style/shoelace@2.15.1/cdn/');</script>
-  <script type="module" src="scripts/login_component.js"></script>
-  <script type="module" src="scripts/signup_component.js"></script>
   <script type="module" src="scripts/soundcloud-track.js"></script>
   <script src="scripts/env.js"></script>
   <script src="scripts/config.js"></script>
@@ -170,19 +168,7 @@
     </div>
   </footer>
 
-  <template id="auth-dialog-template">
-    <login-component></login-component>
-    <div class="separator">
-      <hr><span>OR</span>
-      <hr>
-    </div>
-    <sl-button class="login-google" variant="primary">Login with Google</sl-button>
-    <div class="separator">
-      <hr><span>OR</span>
-      <hr>
-    </div>
-    <sl-button class="sign-up" variant="success">Sign Up</sl-button>
-  </template>
+
 </body>
 
 <script>

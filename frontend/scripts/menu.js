@@ -172,17 +172,7 @@ accountMenuDropdown.addEventListener("sl-select", function (e) {
   // Handle different menu options
   switch (selectedItem.trim()) {
     case "Login":
-      //console.log("Open login dialog");
-      // no iframe here, local auth form.
-      document.getElementById("generalIframe").style.display = "none";
-      // set dialog title
-      document
-        .getElementById("generalDialog")
-        .setAttribute("label", "Login or Sign Up");
-      //render auth dialog
-      renderAuthSialog();
-      // show dialog
-      document.getElementById("generalDialog").show();
+      openManagedLogin();
       break;
 
     case "Logout":
@@ -230,20 +220,6 @@ accountMenuDropdown.addEventListener("sl-select", function (e) {
   accountMenuDropdown.style.display = "none";
 });
 
-function renderAuthSialog() {
-  clearGeneralDialog();  
-  document.getElementById("generalIframe").style.display = "none";
-  closeConfirmationDialog();
-  
-  const template = document.getElementById("auth-dialog-template");
-  const clone = template.content.cloneNode(true);
-  document.getElementById("generalDialog").appendChild(clone);
-  
-  // Attach event listeners
-  document.querySelector(".login-google").addEventListener("click", loginWithGoogle);
-  document.querySelector(".sign-up").addEventListener("click", renderSignUpDialog);
-}
-
 function clearGeneralDialog() {
   const dialog = document.getElementById("generalDialog");
   // Remove all children except the close button and iframe
@@ -261,16 +237,3 @@ function clearGeneralDialog() {
   });
 }
 
-function renderSignUpDialog() {
-  clearGeneralDialog();
-  //this is not an iframe based auth, we turn of the iframe and render the form here
-  document.getElementById("generalIframe").style.display = "none";
-  //set the dialog title
-  document
-    .getElementById("generalDialog")
-    .setAttribute("label", "Sign Up for a new account");
-  closeConfirmationDialog();
-  // Create the regular Cognito signup form
-  const signUpComponent = document.createElement("signup-component");
-  document.getElementById("generalDialog").appendChild(signUpComponent);
-}

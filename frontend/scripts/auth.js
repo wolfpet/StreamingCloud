@@ -102,71 +102,20 @@ async function exchangeCodeForToken(code) {
   }
 }
 
-// Login with Google
-function loginWithGoogle() {
-  const authUrl = `https://${COGNITO_DOMAIN}/oauth2/authorize?` +
-    `client_id=${CLIENT_ID}&` +
-    `response_type=code&` +
-    `scope=openid+email+profile&` +
-    `redirect_uri=${encodeURIComponent(REDIRECT_URI)}&` +
-    `identity_provider=Google`;
-  
-  window.location.href = authUrl;
-}
-
-// Login with Cognito (email/password)
-async function loginWithEmail(email, password) {
-  try {
-    const response = await fetch(`https://${COGNITO_DOMAIN}/oauth2/token`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/x-www-form-urlencoded',
-      },
-      body: new URLSearchParams({
-        grant_type: 'password',
-        client_id: CLIENT_ID,
-        username: email,
-        password: password,
-        scope: 'openid email profile',
-      }),
-    });
-    
-    const data = await response.json();
-    
-    if (response.ok && data.id_token) {
-      localStorage.setItem('idToken', data.id_token);
-      localStorage.setItem('accessToken', data.access_token);
-      if (data.refresh_token) {
-        localStorage.setItem('refreshToken', data.refresh_token);
-      }
-      
-      // Extract and store user info from the ID token
-      try {
-        const parts = data.id_token.split('.');
-        if (parts.length === 3) {
-          const tokenPayload = JSON.parse(atob(parts[1]));
-          localStorage.setItem('userName', tokenPayload.name || tokenPayload.email || 'User');
-          localStorage.setItem('userEmail', tokenPayload.email || '');
-          localStorage.setItem('userPicture', tokenPayload.picture || '');
-        }
-      } catch (decodeError) {
-        console.error('Error decoding token payload:', decodeError);
-      }
-      
-      //console.log('User authenticated successfully!');
-      updateAuthUI();
-      showAuthAlert('Successfully logged in!', 'success');
-      return true;
-    } else {
-      console.error('Login failed:', data);
-      showAuthAlert('Login failed. Check your email and password.', 'danger');
-      return false;
-    }
-  } catch (error) {
-    console.error('Error during login:', error);
-    showAuthAlert('An error occurred during login. Please try again.', 'danger');
-    return false;
+// Open Cognito Managed Login page
+// identityProvider is optional — omit for the default managed login page (email/password + sign-up),
+// pass 'Google' to skip straight to Google OAuth.
+function openManagedLogin(identityProvider) {
+  const params = new URLSearchParams({
+    client_id: CLIENT_ID,
+    response_type: 'code',
+    scope: 'openid email profile',
+    redirect_uri: REDIRECT_URI,
+  });
+  if (identityProvider) {
+    params.set('identity_provider', identityProvider);
   }
+  window.location.href = `https://${COGNITO_DOMAIN}/oauth2/authorize?${params.toString()}`;
 }
 
 // Logout
