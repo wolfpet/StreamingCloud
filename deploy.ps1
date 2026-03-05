@@ -1,3 +1,9 @@
+# Ensure Lambda dependencies are installed
+Write-Host "Installing Lambda dependencies..."
+Push-Location lambda
+npm install --omit=dev
+Pop-Location
+
 # Load SSM prefix from site.config.json
 $config = Get-Content "site.config.json" -ErrorAction Stop | ConvertFrom-Json
 $ssmPrefix = $config._derived.ssmPrefix 2>$null
