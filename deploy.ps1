@@ -21,3 +21,7 @@ $env:GOOGLE_CLIENT_SECRET = aws ssm get-parameter --name "$ssmPrefix/google-clie
 
 Write-Host "Deploying (Google OAuth credentials read from SSM)..."
 cdk deploy --require-approval never
+
+# Apply Cognito Hosted UI customization
+Write-Host "`nApplying Cognito UI customization..." -ForegroundColor Cyan
+.\apply-cognito-ui.ps1
