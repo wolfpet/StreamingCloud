@@ -15,11 +15,24 @@ if (-not $ssmPrefix) {
 
 Write-Host "Using SSM prefix: $ssmPrefix"
 
-# Fetch Google OAuth credentials from SSM Parameter Store
-$env:GOOGLE_CLIENT_ID = aws ssm get-parameter --name "$ssmPrefix/google-client-id" --with-decryption --query "Parameter.Value" --output text
-$env:GOOGLE_CLIENT_SECRET = aws ssm get-parameter --name "$ssmPrefix/google-client-secret" --with-decryption --query "Parameter.Value" --output text
+# Fetch Google OAuth credentials from SSM if enabled in site config
+$googleOAuth = $config.cognito.googleOAuth
+if ($googleOAuth -eq $true) {
+    Write-Host "Google OAuth enabled - fetching credentials from SSM..." -ForegroundColor Cyan
+    $env:GOOGLE_CLIENT_ID = aws ssm get-parameter --name "$ssmPrefix/google-client-id" --with-decryption --query "Parameter.Value" --output text
+    $env:GOOGLE_CLIENT_SECRET = aws ssm get-parameter --name "$ssmPrefix/google-client-secret" --with-decryption --query "Parameter.Value" --output text
+    if (-not $env:GOOGLE_CLIENT_ID -or -not $env:GOOGLE_CLIENT_SECRET) {
+        Write-Host "ERROR: Google OAuth is enabled but credentials not found in SSM." -ForegroundColor Red
+        exit 1
+    }
+    Write-Host "Google OAuth credentials loaded." -ForegroundColor Green
+} else {
+    $env:GOOGLE_CLIENT_ID = ""
+    $env:GOOGLE_CLIENT_SECRET = ""
+    Write-Host "Google OAuth not enabled - deploying with Cognito-only login." -ForegroundColor Yellow
+}
 
-Write-Host "Deploying (Google OAuth credentials read from SSM)..."
+Write-Host "Deploying..."
 $env:CDK_SITE_CONFIG = "site.config.json"
 cdk deploy --require-approval never
 

@@ -6,19 +6,19 @@ Open-source, self-hosted music streaming platform built on AWS. Upload tracks, s
 
 Hi, I'm Peter Wolf, the founder of Streaming Cloud. I've been making and DJing techno music for quite some time. I also have a lifelong career in software development. As a DJ and producer, I felt that I don't have much choice on where to host my music. Most streaming platforms (Apple, Spotify, Amazon, etc.) are designed for serving (or selling) individual songs, which is perfectly fine for Top 40 music. Techno, however, is meant to be mixed in multi-hour DJ sets. Listening to individual techno tracks makes very little sense. I'm sure this applies to some other genres of music as well. What's left? Youtube started interrupting sets with ads, which is not a great experience: it's like turning on the lights on the dance floor in the middle of the party night. Not good. SoundCloud allows DJ sets, but you're either limited to a couple of sets or it gets expensive, not to mention that your set will be lost among millions of short tracks. MixCloud? Well, I just don't like it. So... I guess that's it? That gave me sufficient motivation to build a platform that...
 
-- Free and Open Source
-- Highly customizable
-- Hosting that costs only a tiny fraction of what premium subscriptions would cost per user.
-- Infinitely scalable using the modern cloud tech. 1 listener or a million -- it won't slow down or crash.
-- Works well on computers and phones natively, or via third-party apps using an open standard protocol (RSS)
-- Not bloated with useless social media hooks. "Less is more" not only applies to techno music but also to software. As a side effect of that, it should deter people with a wrong motivation: the lack of counters for plays, likes and shares, lack of comments and such would only retain the uploaders who truly love sharing their craft and not those who chase validation in numbers. Zero ego platform, basically. 
-- Not every set is great, so the host (you) should have an (optional) way to approve or reject someone's  upload.
-- You can resume where you left off, across devices. Especially important for long DJ sets!
-- Looks pretty and delightful to use.
+- is Free and Open Source
+- is Highly customizable
+- provides music Hosting that costs only a tiny fraction of what premium subscriptions would cost per user.
+- is Infinitely scalable using the modern cloud tech. 1 listener or a million -- it won't slow down or crash.
+- works well on computers and phones natively, or via third-party apps using an open standard protocol (RSS)
+- is not bloated with useless social media hooks. "Less is more" not only applies to techno music but also to software. As a side effect of that, it should deter people with a wrong motivation: the lack of counters for plays, likes and shares, lack of comments and such would only retain the uploaders who truly love sharing their craft and not those who chase validation in numbers. Zero ego platform, basically. 
+- provides approval workflow. Not every set is great, so the host (you) should have an (optional) way to approve or reject someone's  upload.
+- provides the ability to resume where you left off, across devices. Especially important for long DJ sets!
+- looks pretty and delightful to use.
 
 ![Alt text](test/StreamingCloud.jpg)
 
-**Live features:** audio player with waveform visualization, user accounts (email + Google login), bookmarks, search, RSS podcast feed, admin panel for user and content management.
+**Live features:** audio player with waveform visualization, user accounts (email + optional Google login), bookmarks, search, RSS podcast feed, admin panel for user and content management.
 
 ## Architecture Overview
 
@@ -28,7 +28,7 @@ Streaming Cloud is deployed as a single AWS CDK stack. Everything runs serverles
 |-----------|-------------|
 | Frontend (SPA) | S3 + CloudFront |
 | API | API Gateway + Lambda |
-| Auth | Cognito (email + Google OAuth) |
+| Auth | Cognito (email + optional Google OAuth) |
 | Database | DynamoDB |
 | Audio storage | S3 |
 | Waveform generation | Step Functions + Lambda + FFmpeg layer |
@@ -92,9 +92,9 @@ Open `site.config.json` in your editor and update at minimum:
 
 See [Configuration Reference](#configuration-reference) below for all available options.
 
-### Step 3 — Set up Google OAuth (for "Sign in with Google")
+### Step 3 — Set up Google OAuth (optional — for "Sign in with Google")
 
-Streaming Cloud uses Google OAuth for social login. You need to create credentials and store them securely in AWS.
+Google OAuth is **optional**. By default (`cognito.googleOAuth: false` in your site config), users sign in with email and password only. If you want to enable "Sign in with Google", set `cognito.googleOAuth` to `true` in your `site.config.json` and follow the steps below. Otherwise, skip to Step 4.
 
 #### 3a. Create Google OAuth credentials
 
@@ -183,7 +183,7 @@ If your domain isn't already in Route 53:
 
 ### Step 6 — Deploy
 
-Use the deploy script, which securely fetches your Google OAuth credentials from SSM:
+Use the deploy script, which securely fetches your Google OAuth credentials from SSM (if `cognito.googleOAuth` is enabled):
 
 **On Windows (PowerShell):**
 
@@ -196,10 +196,13 @@ Use the deploy script, which securely fetches your Google OAuth credentials from
 ```bash
 # Load SSM prefix from config
 DOMAIN=$(cat site.config.json | python3 -c "import sys,json; print(json.load(sys.stdin)['site']['domainName'])")
+GOOGLE_OAUTH=$(cat site.config.json | python3 -c "import sys,json; print(json.load(sys.stdin).get('cognito',{}).get('googleOAuth',False))")
 PREFIX="/${DOMAIN%%.*}/secrets"
 
-export GOOGLE_CLIENT_ID=$(aws ssm get-parameter --name "$PREFIX/google-client-id" --with-decryption --query "Parameter.Value" --output text)
-export GOOGLE_CLIENT_SECRET=$(aws ssm get-parameter --name "$PREFIX/google-client-secret" --with-decryption --query "Parameter.Value" --output text)
+if [ "$GOOGLE_OAUTH" = "True" ]; then
+  export GOOGLE_CLIENT_ID=$(aws ssm get-parameter --name "$PREFIX/google-client-id" --with-decryption --query "Parameter.Value" --output text)
+  export GOOGLE_CLIENT_SECRET=$(aws ssm get-parameter --name "$PREFIX/google-client-secret" --with-decryption --query "Parameter.Value" --output text)
+fi
 
 cdk deploy --require-approval never
 ```
@@ -248,6 +251,7 @@ All configuration lives in `site.config.json`. Here is every available option:
 
 | Key | Type | Description |
 |-----|------|-------------|
+| `googleOAuth` | boolean | Enable Google sign-in (default: `false`). Requires Google OAuth credentials in SSM. |
 | `refreshTokenValidityDays` | number | How long refresh tokens last (default: `365`) |
 | `minPasswordLength` | number | Minimum password length (default: `7`) |
 
@@ -352,7 +356,7 @@ The files in `frontend/docs/` (terms of service, privacy policy, contact page) c
 | Problem | Solution |
 |---------|----------|
 | `site.config.json not found` | Copy `site.config.example.json` to `site.config.json` and fill in your values |
-| `GOOGLE_CLIENT_ID is undefined` | Make sure to deploy using `deploy.ps1`, not `cdk deploy` directly |
+| `GOOGLE_CLIENT_ID is undefined` | Make sure `cognito.googleOAuth` is `true` in your site config and credentials are stored in SSM, then deploy using `deploy.ps1` |
 | `FFmpeg layer not found` | Run `create-ffmpeg-layer.ps1` before your first deploy |
 | `HostedZone not found` | Create a Route 53 hosted zone for your domain first |
 | `Certificate validation timeout` | Make sure your domain's nameservers point to Route 53 |

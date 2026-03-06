@@ -23,6 +23,7 @@
   },
 
   "cognito": {
+    "googleOAuth": false,
     "refreshTokenValidityDays": 365,
     "minPasswordLength": 7
   },
