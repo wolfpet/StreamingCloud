@@ -69,9 +69,10 @@ $tempCssFile = [System.IO.Path]::GetTempFileName() + ".css"
 Set-Content -Path $tempCssFile -Value $css -NoNewline
 Write-Host "CSS prepared at: $tempCssFile" -ForegroundColor Green
 
-# 4. Prepare logo image (prefer brand-override if it exists)
-$logoPath = "brand-override/img/Player_logo-192x192.png"
-if (!(Test-Path $logoPath)) {
+# 4. Prepare logo image (prefer brand-override only for production config)
+if ($ConfigFile -eq "site.config.json" -and (Test-Path "brand-override/img/Player_logo-192x192.png")) {
+    $logoPath = "brand-override/img/Player_logo-192x192.png"
+} else {
     $logoPath = "frontend/img/Player_logo-192x192.png"
 }
 if (!(Test-Path $logoPath)) {
