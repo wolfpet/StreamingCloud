@@ -20,6 +20,7 @@ $env:GOOGLE_CLIENT_ID = aws ssm get-parameter --name "$ssmPrefix/google-client-i
 $env:GOOGLE_CLIENT_SECRET = aws ssm get-parameter --name "$ssmPrefix/google-client-secret" --with-decryption --query "Parameter.Value" --output text
 
 Write-Host "Deploying (Google OAuth credentials read from SSM)..."
+$env:CDK_SITE_CONFIG = "site.config.json"
 cdk deploy --require-approval never
 
 # Apply Cognito Hosted UI customization

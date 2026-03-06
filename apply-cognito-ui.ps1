@@ -69,10 +69,13 @@ $tempCssFile = [System.IO.Path]::GetTempFileName() + ".css"
 Set-Content -Path $tempCssFile -Value $css -NoNewline
 Write-Host "CSS prepared at: $tempCssFile" -ForegroundColor Green
 
-# 4. Prepare logo image
-$logoPath = "frontend/img/Player_logo-192x192.png"
+# 4. Prepare logo image (prefer brand-override if it exists)
+$logoPath = "brand-override/img/Player_logo-192x192.png"
 if (!(Test-Path $logoPath)) {
-    Write-Host "WARNING: Logo file not found at $logoPath, will upload CSS only" -ForegroundColor Yellow
+    $logoPath = "frontend/img/Player_logo-192x192.png"
+}
+if (!(Test-Path $logoPath)) {
+    Write-Host "WARNING: Logo file not found, will upload CSS only" -ForegroundColor Yellow
     $logoPath = $null
 }
 
