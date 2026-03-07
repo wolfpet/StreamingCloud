@@ -20,7 +20,7 @@ Hi, I'm Peter Wolf, the founder of Streaming Cloud. I've been making and DJing t
 
 **Live features:** audio player with waveform visualization, user accounts (email + optional Google login), bookmarks, search, RSS podcast feed, admin panel for user and content management.
 
-## Deployment Guide Video
+## Deployment Youtube Guide
 
 [![Video Guide](https://img.youtube.com/vi/8wIAte49474/maxresdefault.jpg)](https://www.youtube.com/watch?v=8wIAte49474)
 
