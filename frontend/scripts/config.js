@@ -19,6 +19,12 @@ if (!window.APP_CONFIG) {
     GOOGLE_SITE_VERIFICATION: ""
   };
 }
+
+// Normalize API URL so endpoint joins do not produce double slashes.
+if (typeof window.APP_CONFIG.API_URL === "string") {
+  window.APP_CONFIG.API_URL = window.APP_CONFIG.API_URL.replace(/\/+$/, "");
+}
+
 window.SYNC_ACROSS_DEVICES = true; // Default value, can be updated based on user settings
 
 
