@@ -49,7 +49,8 @@
   },
 
   "upload": {
-    "presignedUrlExpirySeconds": 3600
+    "presignedUrlExpirySeconds": 3600,
+    "minFileLengthSeconds": 0
   },
 
   "playback": {

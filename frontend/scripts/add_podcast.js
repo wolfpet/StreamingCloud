@@ -283,7 +283,7 @@ podcastForm.addEventListener("submit", async (e) => {
     const audioPlayer = document.getElementById("audioPlayer");  
     //audio duration in seconds
     const audioDuration = audioPlayer.duration;
-    if (audioDuration < 3400) {
+    if (audioDuration < (APP_CONFIG.MIN_FILE_LENGTH_SECONDS ?? 0)) {
       showMessage("A set should be at least 1 hour long.", "error");
       return;
     }    
