@@ -200,6 +200,9 @@ function isAuthenticated() {
   return localStorage.getItem('idToken') !== null;
 }
 
+// Tracks the newest UI update call so stale async calls do not append duplicate menu items.
+let authUiUpdateVersion = 0;
+
 // Get user info from ID token
 async function getUserInfo() {
   // First, try to return cached user info from localStorage
@@ -308,6 +311,8 @@ async function getUserInfo() {
 
 // Update UI based on auth status
 async function updateAuthUI() {
+  const currentUpdateVersion = ++authUiUpdateVersion;
+
   //login, logout, etc. is handled in the avatar menu
   const accountMenuDropdown = document.getElementById('accountMenuDropdown');
   
@@ -329,11 +334,14 @@ async function updateAuthUI() {
   //add <sl-divider>
   const divider = document.createElement('sl-divider');
   accountMenuDropdown.appendChild(divider);
-
+  
   //if authenticated, update avatar, show my bookmarks, my uploads, and logout options
-
   if (isAuthenticated()) {
     const user = await getUserInfo();
+
+    // Abort stale renders if a newer updateAuthUI() call started while awaiting user info.
+    if (currentUpdateVersion !== authUiUpdateVersion) return;
+
     //menu items for logged in user
     const uploadLink = document.getElementById("uploadLink");
     if (uploadLink) uploadLink.style.display = "block";
@@ -400,13 +408,6 @@ async function updateAuthUI() {
 // Initialize auth on page load
 window.addEventListener('DOMContentLoaded', function() {
   handleOAuthCallback();
-  updateAuthUI().catch(err => console.error('Error updating auth UI:', err));
-});
-
-
-// Also handle on load event
-window.addEventListener('load', function() {
-  // Make sure auth UI is updated
   updateAuthUI().catch(err => console.error('Error updating auth UI:', err));
 });
 
