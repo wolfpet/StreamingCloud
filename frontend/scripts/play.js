@@ -7,6 +7,40 @@ const playerArt = document.getElementById("player-art");
 let currentPlayingTrack = null;
 let player = null;
 
+function getSafeDuration() {
+  const duration = Number(audio.duration);
+  return Number.isFinite(duration) && duration > 0 ? duration : null;
+}
+
+function seekToPercentage(percentage) {
+  const duration = getSafeDuration();
+  const numericPercentage = Number(percentage);
+  if (duration === null || !Number.isFinite(numericPercentage)) {
+    return false;
+  }
+
+  const clampedPercentage = Math.min(1, Math.max(0, numericPercentage));
+  const targetTime = clampedPercentage * duration;
+  if (!Number.isFinite(targetTime)) {
+    return false;
+  }
+
+  audio.currentTime = targetTime;
+  return true;
+}
+
+function seekToSeconds(seconds) {
+  const duration = getSafeDuration();
+  const numericSeconds = Number(seconds);
+  if (duration === null || !Number.isFinite(numericSeconds)) {
+    return false;
+  }
+
+  const clampedSeconds = Math.min(duration, Math.max(0, numericSeconds));
+  audio.currentTime = clampedSeconds;
+  return true;
+}
+
 // Initialize Plyr when DOM is ready
 document.addEventListener("DOMContentLoaded", () => {
   player = new Plyr("#main-audio", {
@@ -106,7 +140,8 @@ function attachWaveformClickListeners() {
       // Add click listener to the container
       waveformContainer.addEventListener("click", (e) => {
         const rect = waveformContainer.getBoundingClientRect();
-        const clickPercentage = (e.clientX - rect.left) / rect.width;
+        const clickPercentage =
+          rect.width > 0 ? (e.clientX - rect.left) / rect.width : NaN;
 
         // If this track is not currently playing, request play first
         if (currentPlayingTrack !== track) {
@@ -123,21 +158,20 @@ function attachWaveformClickListeners() {
 
           // Wait for audio to load before seeking
           if (audio.readyState >= 1) {
-            // Audio is ready
-            audio.currentTime = clickPercentage * audio.duration;
+            seekToPercentage(clickPercentage);
           } else {
             // Wait for loadedmetadata event
             audio.addEventListener(
               "loadedmetadata",
               () => {
-                audio.currentTime = clickPercentage * audio.duration;
+                seekToPercentage(clickPercentage);
               },
               { once: true },
             );
           }
         } else {
           // Track is already playing, seek directly
-          audio.currentTime = clickPercentage * audio.duration;
+          seekToPercentage(clickPercentage);
         }
       });
 
@@ -173,28 +207,19 @@ function attachWaveformSliderListeners() {
 
           // Wait for audio to load before seeking
           if (audio.readyState >= 1) {
-            const newTime = sliderPercentage * audio.duration;
-            if (isFinite(newTime)) {
-              audio.currentTime = newTime;
-            }
+            seekToPercentage(sliderPercentage);
           } else {
             audio.addEventListener(
               "loadedmetadata",
               () => {
-                const newTime = sliderPercentage * audio.duration;
-                if (isFinite(newTime)) {
-                  audio.currentTime = newTime;
-                }
+                seekToPercentage(sliderPercentage);
               },
               { once: true },
             );
           }
         } else {
           // Track is already playing, seek directly
-          const newTime = sliderPercentage * audio.duration;
-          if (isFinite(newTime)) {
-            audio.currentTime = newTime;
-          }
+          seekToPercentage(sliderPercentage);
         }
       });
 
@@ -232,7 +257,7 @@ document.addEventListener("request-play", (e) => {
       //indeed I was therem let's set mainAudio.currentTime
       var parsedTimestamp = getSubstringBeforeChar(lastTimestamp, "/");
       var parsedTimestampInSec = convertMmSsToSeconds(parsedTimestamp);
-      audio.currentTime = parsedTimestampInSec;
+      seekToSeconds(parsedTimestampInSec);
     }
     //check if the album art is png or jpeg
     const albumArtType = track.artwork.endsWith(".png") ? "image/png" : "image/jpeg";
