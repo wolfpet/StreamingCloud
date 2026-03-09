@@ -213,7 +213,6 @@ function removeAdminToolsContainer() {
 }
 
 function openUploadDialog() {
-  console.log("Opening upload dialog for admin user");
   // set iframe src to upload.html
   window.parent.clearGeneralDialog();
   window.parent.document.getElementById("generalIframe").src = "add_podcast.html";
