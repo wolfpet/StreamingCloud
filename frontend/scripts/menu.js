@@ -2,8 +2,11 @@
 const btn = document.getElementById("hamburger-btn");
 const menu = document.getElementById("mobile-menu");
 
-//hide uploadLink IF NOT AUTHENTICATED
-if (!isAuthenticated()) {
+
+console.log(window.APP_CONFIG.NO_PUBLIC_UPLOADS);
+//hide uploadLink IF NOT AUTHENTICATED and if site setting is admin-only uploads.
+if (!isAuthenticated() || (window.APP_CONFIG && window.APP_CONFIG.NO_PUBLIC_UPLOADS)) {
+  console.log("Hiding upload link due to authentication status or site settings");
   document.getElementById("uploadLink").style.display = "none";
   //document.getElementById("bookmarks").style.display = "none";
 }

@@ -165,14 +165,18 @@ async function renderAdminTools() {
       //make this div visible and populate with admin tools
       if (adminToolsContainer) {
         adminToolsContainer.style.display = "block";
-        //approval queue
-        //let adminHtml = '<li><strong></strong><button class="button" onclick="redirectTo(\'/admin_music_approval.html\')">Music Approval Queue</button></li>';
-        let adminHtml = '<li><strong>Content approval: </strong><a href="admin_music_approval.html">Upload Queue</a></li>';
-        //user management
-        //adminHtml += '<li><strong></strong><button class="button" onclick="redirectTo(\'/admin_user_management.html\')">User Management</button></li>';
+        //upload option goes here if the site setting is admin-only uploads
+        let adminHtml = '';
+        if (window.parent.APP_CONFIG && window.parent.APP_CONFIG.NO_PUBLIC_UPLOADS) {
+          adminHtml += '<li><strong>Content: </strong><a href="#" onclick="openUploadDialog()">Upload</a></li>';
+        }
+        //approval queue        
+        adminHtml += '<li><strong>Content approval: </strong><a href="admin_music_approval.html">Upload Queue</a></li>';
+        //user management        
         adminHtml += '<li><strong>Admin: </strong><a href="admin_users.html">User Management</a></li>';
         //administrative messages
         adminHtml += '<li><strong>Admin: </strong><a href="admin_messages.html">Messages and takedown requests</a></li>';
+
         //add these tools to the "philosophy-list" ul inside the admin tools container
         const philosophyList = adminToolsContainer.querySelector(".philosophy-list");
         if (philosophyList) {
@@ -206,4 +210,17 @@ function removeAdminToolsContainer() {
     adminToolsContainer.remove();
 
   }
+}
+
+function openUploadDialog() {
+  console.log("Opening upload dialog for admin user");
+  // set iframe src to upload.html
+  window.parent.clearGeneralDialog();
+  window.parent.document.getElementById("generalIframe").src = "add_podcast.html";
+  // set dialog title
+  window.parent.document
+    .getElementById("generalDialog")
+    .setAttribute("label", "Upload");
+  // show dialog
+  //document.getElementById("generalDialog").show();
 }

@@ -15,7 +15,8 @@
   },
   
   "administration": {
-    "approvalRequired": true
+    "approvalRequired": true,
+    "noPublicUploads": false 
   },
 
   "seo": {

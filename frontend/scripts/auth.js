@@ -344,7 +344,7 @@ async function updateAuthUI() {
 
     //menu items for logged in user
     const uploadLink = document.getElementById("uploadLink");
-    if (uploadLink) uploadLink.style.display = "block";
+    if (uploadLink && !(window.APP_CONFIG && window.APP_CONFIG.NO_PUBLIC_UPLOADS)) uploadLink.style.display = "block";
     
     if (user) {
       const displayName = user.name || user.email || 'User';
