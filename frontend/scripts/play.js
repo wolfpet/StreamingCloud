@@ -218,8 +218,9 @@ document.addEventListener("request-play", (e) => {
       (t) => t.audioUrl === track.audioUrl,
     );
 
-    if (playerTitle) playerTitle.innerText = track.title;
-    if (playerArtist) playerArtist.innerText = track.artist;
+
+    if (playerTitle) playerTitle.innerHTML = '<a href="#" style="text-decoration: none;" onclick="searchPodcasts(\'' + track.title + '\')">' + track.title + '</a>';
+    if (playerArtist) playerArtist.innerHTML = '<a href="#" style="text-decoration: none;" onclick="searchArtist(\'' + track.artist + '\', \'artist\')">' + track.artist + '</a>';
     if (playerArt) {
       playerArt.src = track.artwork;
       playerArt.style.display = "block";

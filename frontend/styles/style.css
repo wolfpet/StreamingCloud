@@ -94,7 +94,9 @@ body.dark-mode #global-player a {
     display: none;
 }
 
-#player-title {
+#player-title a,
+#player-title a:link,
+#player-title a:visited {
     font-weight: bold;
     font-size: 12px;
     white-space: nowrap;
@@ -104,7 +106,7 @@ body.dark-mode #global-player a {
     margin-left: 5px;
 }
 
-#player-artist {
+#player-artist a {
     font-size: 11px;
     color: #666;
     margin-left: 5px;
