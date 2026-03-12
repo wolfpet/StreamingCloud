@@ -1,4 +1,5 @@
 // lambda/add_podcast.js
+
 const { DynamoDBClient } = require("@aws-sdk/client-dynamodb");
 const {
   DynamoDBDocumentClient,
@@ -144,6 +145,11 @@ exports.handler = async (event) => {
     // Normalize text inputs to ASCII ( to remove accents (diacritics) from a string, turning characters like é into e or ñ into n)
     let normalizedArtist = sanitizedArtist.replace(/[øØ]/g, "o").replace(/[łŁ]/g, "l").replace(/[æÆ]/g, "ae").normalize("NFD").replace(/[\u0300-\u036f]/g, "");
     let normalizedTitle = sanitizedTitle.replace(/[øØ]/g, "o").replace(/[łŁ]/g, "l").replace(/[æÆ]/g, "ae").normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+    //limit the length of artist and title to prevent excessively long values
+    const maxTitleLength = 250;  
+    const maxArtistLength = 100;    
+    let shortenedTitle = normalizedTitle.substring(0, maxTitleLength);
+    let shortenedArtist = normalizedArtist.substring(0, maxArtistLength);
     // Put the podcast item in DynamoDB
     await docClient.send(
       new PutCommand({
@@ -152,10 +158,10 @@ exports.handler = async (event) => {
           pk: "PODCASTS",
           id: podcastId,
           timestamp: new Date().toISOString(),
-          artist: sanitizedArtist,
-          artist_lowercase: normalizedArtist.toLowerCase(),
-          title: sanitizedTitle,
-          title_lowercase: normalizedTitle.toLowerCase(),
+          artist: shortenedArtist,
+          artist_lowercase: shortenedArtist.toLowerCase(),
+          title: shortenedTitle,
+          title_lowercase: shortenedTitle.toLowerCase(),
           artwork: artwork || null,
           audioUrl: audioUrl,
           audioUrlRelative: audioUrlRelative,
@@ -179,8 +185,8 @@ exports.handler = async (event) => {
         data: {
           id: podcastId,
           timestamp: new Date().toISOString(),
-          artist: sanitizedArtist,
-          title: sanitizedTitle,
+          artist: shortenedArtist,
+          title: shortenedTitle,
           email: podcastEmail,
           status: podcastStatus,
         },
