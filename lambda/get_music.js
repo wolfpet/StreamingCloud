@@ -18,7 +18,7 @@ exports.handler = async (event) => {
         const params = {
             TableName: tableName,
             KeyConditionExpression: 'pk = :pk',
-            ProjectionExpression: 'pk, sk, id, artist, title, artwork, #d, waveformUrl, audioUrl, audioUrlRelative',
+            ProjectionExpression: 'pk, sk, id, artist, title, artwork, #d, waveformUrl, audioUrl, audioUrlRelative, tracklist',
             ExpressionAttributeValues: {
                 ':pk': { S: 'PODCASTS' },
                 ':status': { S: 'approved' }
@@ -40,7 +40,7 @@ exports.handler = async (event) => {
         const command = new QueryCommand(params);
         const result = await dynamodb.send(command);
         
-        // Unmarshall the items
+        // Unmarshall the items, including the full tracklist when present.
         const items = result.Items.map(item => unmarshall(item));
         
         // Prepare response
