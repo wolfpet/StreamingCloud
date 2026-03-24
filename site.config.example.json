@@ -66,5 +66,9 @@
   "waveform": {
     "width": 800,
     "height": 100
+  },
+
+  "audd": {
+    "trackRecognition": false
   }
 }

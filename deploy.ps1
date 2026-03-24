@@ -66,6 +66,22 @@ if ($googleOAuth -eq $true) {
     Write-Host "Google OAuth not enabled - deploying with Cognito-only login." -ForegroundColor Yellow
 }
 
+# Fetch audd.io API token from SSM if track recognition is enabled
+$trackRecognition = $config.audd.trackRecognition
+if ($trackRecognition -eq $true) {
+    Write-Host "Track recognition enabled - fetching audd.io API token from SSM..." -ForegroundColor Cyan
+    $env:AUDD_API_TOKEN = aws ssm get-parameter --name "$ssmPrefix/audd-api-token" --with-decryption --query "Parameter.Value" --output text 2>$null
+    if (-not $env:AUDD_API_TOKEN) {
+        Write-Host "ERROR: Track recognition is enabled but audd.io API token not found in SSM." -ForegroundColor Red
+        Write-Host "Run ./setup-audd-prod.ps1 to configure the audd.io API token." -ForegroundColor Yellow
+        exit 1
+    }
+    Write-Host "audd.io API token loaded." -ForegroundColor Green
+} else {
+    $env:AUDD_API_TOKEN = ""
+    Write-Host "Track recognition not enabled - skipping audd.io token." -ForegroundColor Yellow
+}
+
 # Deploy with CDK
 Write-Host "`nDeploying to Production..." -ForegroundColor Cyan
 $env:CDK_SITE_CONFIG = "site.config.json"
