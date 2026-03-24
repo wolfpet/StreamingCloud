@@ -18,7 +18,7 @@ Hi, I'm Peter Wolf, the founder of Streaming Cloud. I've been making and DJing t
 
 ![Alt text](test/StreamingCloud.jpg)
 
-**Live features:** audio player with waveform visualization, user accounts (email + optional Google login), bookmarks, search, RSS podcast feed, admin panel for user and content management.
+**Live features:** audio player with waveform visualization, user accounts (email + optional Google login), bookmarks, search, automatic tracklist generation via audd.io, RSS podcast feed, admin panel for user and content management.
 
 ## Deployment Youtube Guide
 
@@ -311,6 +311,79 @@ All configuration lives in `site.config.json`. Here is every available option:
 |-----|------|-------------|
 | `width` | number | Waveform image width in pixels (default: `800`) |
 | `height` | number | Waveform image height in pixels (default: `100`) |
+
+### `audd` — Track recognition (optional)
+
+| Key | Type | Description |
+|-----|------|-------------|
+| `trackRecognition` | boolean | Enable automatic tracklist generation via [audd.io](https://audd.io/) (default: `false`) |
+
+## Track List Feature (audd.io Integration)
+
+Streaming Cloud can automatically identify individual tracks inside uploaded DJ mixes and generate a tracklist for each upload. This is powered by the [audd.io](https://audd.io/) music recognition API.
+
+### How it works
+
+1. When a new track is uploaded and its waveform generation completes, the system triggers a **Track Recognition Step Function** (if enabled).
+2. The Step Function splits the audio into chunks and sends each chunk to audd.io for identification.
+3. Recognized tracks are written back to the DynamoDB record as a `tracklist` attribute — a JSON array of objects:
+   ```json
+   [
+     { "#": 1, "Track Name": "Obscur", "Artist": "Cloud Intelligence" },
+     { "#": 2, "Track Name": "Temptation", "Artist": "Connor Wall" }
+   ]
+   ```
+4. The frontend displays a **Track List** button (music-note-list icon) on any track that has a tracklist. Clicking it opens a dialog with a table of all identified tracks, each with a Google search link to help listeners find and support the original artists.
+
+### Setup
+
+#### 1. Get an audd.io API token
+
+1. Go to [https://dashboard.audd.io/](https://dashboard.audd.io/) and create an account.
+2. Copy your API token from the dashboard.
+
+#### 2. Store the token in AWS SSM Parameter Store
+
+Run the provided setup script:
+
+**On Windows (PowerShell):**
+
+```powershell
+.\setup-audd-prod.ps1
+```
+
+Or store it manually:
+
+```bash
+aws ssm put-parameter \
+  --name "/YOUR_DOMAIN_PREFIX/secrets/audd-api-token" \
+  --value "YOUR_AUDD_API_TOKEN" \
+  --type SecureString
+```
+
+> **Example:** If your domain is `mysite.com`, the SSM path is `/mysite/secrets/audd-api-token`.
+
+#### 3. Enable track recognition in your site config
+
+In `site.config.json`, set:
+
+```json
+"audd": {
+  "trackRecognition": true
+}
+```
+
+#### 4. Deploy
+
+```powershell
+.\deploy.ps1
+```
+
+The deploy script will automatically fetch the audd.io token from SSM and pass it to the CDK stack. If the token is missing, the deploy will fail with a clear error message.
+
+### Costs
+
+audd.io offers a free tier. Beyond that, pricing depends on the number of recognition requests. Each uploaded mix will consume multiple requests (one per audio chunk). Check [audd.io pricing](https://audd.io/) for current rates.
 
 ## Updating an Existing Deployment
 
