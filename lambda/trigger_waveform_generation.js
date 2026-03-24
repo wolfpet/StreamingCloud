@@ -3,6 +3,7 @@ const { SFNClient, StartExecutionCommand } = require("@aws-sdk/client-sfn");
 
 const sfnClient = new SFNClient({});
 const STATE_MACHINE_ARN = process.env.STATE_MACHINE_ARN;
+const TRACK_RECOGNITION_STATE_MACHINE_ARN = process.env.TRACK_RECOGNITION_STATE_MACHINE_ARN;
 
 /**
  * Triggered by DynamoDB stream when new podcast is added
@@ -79,10 +80,33 @@ exports.handler = async (event) => {
                 name: `waveform-${sanitizedTimestamp}-${Date.now()}`
             }));
             
-            console.log(`Step Function started for podcast ${timestamp}`);
+            console.log(`Waveform Step Function started for podcast ${timestamp}`);
         } catch (error) {
-            console.error("Error starting Step Function:", error);
+            console.error("Error starting Waveform Step Function:", error);
             throw error;
+        }
+
+        // Start Track Recognition Step Function
+        if (TRACK_RECOGNITION_STATE_MACHINE_ARN) {
+            try {
+                const trackRecognitionInput = {
+                    audioUrl,
+                    podcastId: newImage.id?.S,
+                    pk,
+                    timestamp,
+                };
+
+                await sfnClient.send(new StartExecutionCommand({
+                    stateMachineArn: TRACK_RECOGNITION_STATE_MACHINE_ARN,
+                    input: JSON.stringify(trackRecognitionInput),
+                    name: `trackrec-${sanitizedTimestamp}-${Date.now()}`
+                }));
+
+                console.log(`Track Recognition Step Function started for podcast ${timestamp}`);
+            } catch (error) {
+                console.error("Error starting Track Recognition Step Function:", error);
+                // Don't throw — waveform already started, track recognition is best-effort
+            }
         }
     });
     
