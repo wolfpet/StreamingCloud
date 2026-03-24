@@ -43,7 +43,7 @@ exports.handler = async (event) => {
     const params = {
       TableName: tableName,
       IndexName: indexName,
-      ProjectionExpression: 'pk, sk, id, artist, title, artwork, #d, waveformUrl, audioUrl, audioUrlRelative',
+      ProjectionExpression: 'pk, sk, id, artist, title, artwork, #d, waveformUrl, audioUrl, audioUrlRelative, tracklist',
       FilterExpression: buildFilterExpression(searchKeyword, isMultiArtistSearch, artistNames.length),
       ExpressionAttributeValues: buildExpressionValues(searchKeyword, artistNames, isMultiArtistSearch),
       ExpressionAttributeNames: {
