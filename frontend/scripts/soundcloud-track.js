@@ -12,6 +12,7 @@ export class SoundcloudTrack extends LitElement {
     audioUrl: { type: String },
     waveform: { type: String },
     trackId: { type: String },
+    tracklist: { type: Object },
     active: { type: Boolean, reflect: true },
     isBookmark: { type: Boolean },
   };
@@ -24,23 +25,23 @@ export class SoundcloudTrack extends LitElement {
     this.updateDarkMode();
     // Apply accent colors from APP_CONFIG
     this._applyAccentColors();
-    
+
     // Observe body class changes for dark mode
     const observer = new MutationObserver(() => {
       this.updateDarkMode();
     });
-    
+
     observer.observe(document.body, {
       attributes: true,
-      attributeFilter: ['class']
+      attributeFilter: ["class"],
     });
   }
 
   _applyAccentColors() {
-    const accentColor = window.APP_CONFIG?.ACCENT_COLOR || '#ff5500';
-    const accentColorLight = window.APP_CONFIG?.ACCENT_COLOR_LIGHT || '#ff8800';
-    this.style.setProperty('--accent-color', accentColor);
-    this.style.setProperty('--accent-color-light', accentColorLight);
+    const accentColor = window.APP_CONFIG?.ACCENT_COLOR || "#ff5500";
+    const accentColorLight = window.APP_CONFIG?.ACCENT_COLOR_LIGHT || "#ff8800";
+    this.style.setProperty("--accent-color", accentColor);
+    this.style.setProperty("--accent-color-light", accentColorLight);
   }
 
   updateDarkMode() {
@@ -113,6 +114,25 @@ export class SoundcloudTrack extends LitElement {
         d="M17.593 3.322c1.1.128 1.907 1.077 1.907 2.185V21L12 17.25 4.5 21V5.507c0-1.108.806-2.057 1.907-2.185a48.507 48.507 0 0111.186 0z"
       />
     </svg>`,
+    TRACKLIST: html`<svg
+      xmlns="http://www.w3.org/2000/svg"
+      fill="none"
+      viewBox="0 0 16 16"
+      stroke-width="1"
+      stroke="currentColor"
+    >
+      <path
+        d="M12 13c0 1.105-1.12 2-2.5 2S7 14.105 7 13s1.12-2 2.5-2 2.5.895 2.5 2z"
+      ></path>
+      <path fill-rule="evenodd" d="M12 3v10h-1V3h1z"></path>
+      <path
+        d="M11 2.82a1 1 0 0 1 .804-.98l3-.6A1 1 0 0 1 16 2.22V4l-5 1V2.82z"
+      ></path>
+      <path
+        fill-rule="evenodd"
+        d="M0 11.5a.5.5 0 0 1 .5-.5H4a.5.5 0 0 1 0 1H.5a.5.5 0 0 1-.5-.5zm0-4A.5.5 0 0 1 .5 7H8a.5.5 0 0 1 0 1H.5a.5.5 0 0 1-.5-.5zm0-4A.5.5 0 0 1 .5 3H8a.5.5 0 0 1 0 1H.5a.5.5 0 0 1-.5-.5z"
+      ></path>
+    </svg>`,
   };
 
   static styles = css`
@@ -125,7 +145,7 @@ export class SoundcloudTrack extends LitElement {
       --accent-color: #ff5500;
       --accent-color-light: #ff8800;
       --card-bg-color: #ffffff;
-      
+
       --darkmode-bg-color: #333333;
       --darkmode-card-bg-color: #555555;
       --darkmode-text-color: #cccccc;
@@ -199,7 +219,10 @@ export class SoundcloudTrack extends LitElement {
     }
 
     .play-btn:hover {
-      background: linear-gradient(var(--accent-color), var(--accent-color-light));
+      background: linear-gradient(
+        var(--accent-color),
+        var(--accent-color-light)
+      );
     }
 
     .play-btn svg {
@@ -259,27 +282,42 @@ export class SoundcloudTrack extends LitElement {
       background-color: var(--card-bg-color);
     }
     .waveform-container::before {
-      content: '';
+      content: "";
       position: absolute;
       top: 0;
       left: 0;
       right: 0;
       bottom: 0;
-      background: linear-gradient(to bottom, rgba(255, 255, 255, 0.4), transparent 50%);
+      background: linear-gradient(
+        to bottom,
+        rgba(255, 255, 255, 0.4),
+        transparent 50%
+      );
       pointer-events: none;
       z-index: 1;
     }
     .waveform-container:hover::before {
-      background: linear-gradient(to bottom, rgba(255, 255, 255, 0.6), transparent 50%);
+      background: linear-gradient(
+        to bottom,
+        rgba(255, 255, 255, 0.6),
+        transparent 50%
+      );
     }
 
-
     :host(.dark-mode) .waveform-container::before {
-      background: linear-gradient(to bottom, transparent 30%, rgba(0, 0, 0, 0.25));
+      background: linear-gradient(
+        to bottom,
+        transparent 30%,
+        rgba(0, 0, 0, 0.25)
+      );
     }
 
     :host(.dark-mode) .waveform-container:hover::before {
-      background: linear-gradient(to bottom, transparent 0%, rgba(0, 0, 0, 0.25));
+      background: linear-gradient(
+        to bottom,
+        transparent 0%,
+        rgba(0, 0, 0, 0.25)
+      );
     }
 
     :host(.dark-mode) .waveform-container {
@@ -299,13 +337,16 @@ export class SoundcloudTrack extends LitElement {
       width: 100%;
       height: 100%;
       display: block;
-      filter: brightness(0) saturate(100%) invert(10%) sepia(0%) saturate(0%) hue-rotate(3deg) brightness(101%) contrast(106%);       opacity: 0.5;
+      filter: brightness(0) saturate(100%) invert(10%) sepia(0%) saturate(0%)
+        hue-rotate(3deg) brightness(101%) contrast(106%);
+      opacity: 0.5;
       position: relative;
       z-index: 0;
     }
 
-      :host(.dark-mode) .waveform-img {
-      filter: brightness(0) saturate(100%) invert(80%) sepia(10%) saturate(500%) hue-rotate(180deg) brightness(90%) contrast(90%);
+    :host(.dark-mode) .waveform-img {
+      filter: brightness(0) saturate(100%) invert(80%) sepia(10%) saturate(500%)
+        hue-rotate(180deg) brightness(90%) contrast(90%);
     }
 
     .waveform-progress {
@@ -321,7 +362,7 @@ export class SoundcloudTrack extends LitElement {
       border-right: 0px solid var(--accent-color);
       pointer-events: none;
     }
-    
+
     :host(.dark-mode) .waveform-progress {
       background-color: var(--darkmode-card-bg-color);
     }
@@ -416,7 +457,6 @@ export class SoundcloudTrack extends LitElement {
 
     /* ===== MOBILE (max-width: 600px) ===== */
     @media (max-width: 600px) {
-
       /*We display the slider on mobile. Sliding is better than clicking on the waveform to seek, especially on small screens. */
       .waveform-overlay-mobile {
         position: absolute;
@@ -425,7 +465,7 @@ export class SoundcloudTrack extends LitElement {
         width: 100%;
         height: 100%;
         z-index: 3;
-        
+
         display: none;
         align-items: center;
         justify-content: center;
@@ -448,11 +488,11 @@ export class SoundcloudTrack extends LitElement {
         margin: 8px 0;
         pointer-events: none; /* Disable pointer events on the waveform container to allow slider interaction */
       }
-      
+
       .waveform-progress {
         opacity: 0.25;
       }
-      
+
       sl-range {
         --track-color-active: var(--accent-color);
         --sl-color-primary-600: var(--accent-color);
@@ -499,11 +539,11 @@ export class SoundcloudTrack extends LitElement {
   `;
 
   _getOrangeWaveformUrl() {
-    if (!this.waveform || this.waveform === 'dummy_waveform.png') {
-      return 'dummy_waveform.png';
+    if (!this.waveform || this.waveform === "dummy_waveform.png") {
+      return "dummy_waveform.png";
     }
     // Replace _black with _orange in the waveform URL
-    return this.waveform.replace('_black.png', '_orange.png');
+    return this.waveform.replace("_black.png", "_orange.png");
   }
 
   /**
@@ -514,7 +554,7 @@ export class SoundcloudTrack extends LitElement {
    */
   _preloadOrangeWaveform() {
     const url = this._getOrangeWaveformUrl();
-    if (url && url !== 'dummy_waveform.png' && !this._orangePreloaded) {
+    if (url && url !== "dummy_waveform.png" && !this._orangePreloaded) {
       const img = new Image();
       img.src = url;
       this._orangePreloaded = true;
@@ -603,14 +643,17 @@ export class SoundcloudTrack extends LitElement {
         email: user.email,
         id: this.trackId || null,
         duration: duration,
-      };      
+      };
 
       // Call the add-bookmark API endpoint
-      const response = await authenticatedFetch(`${APP_CONFIG.API_URL}/add-bookmark`, {
-        method: "POST",
-        headers: getAuthHeaders(),
-        body: JSON.stringify(requestBody),
-      });
+      const response = await authenticatedFetch(
+        `${APP_CONFIG.API_URL}/add-bookmark`,
+        {
+          method: "POST",
+          headers: getAuthHeaders(),
+          body: JSON.stringify(requestBody),
+        },
+      );
 
       if (!response.ok) {
         const errorData = await response.json();
@@ -618,7 +661,7 @@ export class SoundcloudTrack extends LitElement {
         return;
       }
 
-      const result = await response.json();      
+      const result = await response.json();
       showAlert("Podcast bookmarked successfully!", "success");
     } catch (error) {
       console.error("Error bookmarking podcast:", error);
@@ -653,15 +696,162 @@ export class SoundcloudTrack extends LitElement {
     }
   }
 
+  _showTrackList() {
+    closeAllTooltips();
+    clearGeneralDialog();
+    closeConfirmationDialog();
+
+    const dialog = document.getElementById("generalDialog");
+    const iframe = document.getElementById("generalIframe");
+    if (iframe) {
+      iframe.style.display = "none";
+    }
+
+    const trimmedTitle = this.title
+      ? this.title.length > 50
+        ? this.title.substring(0, 50) + "..."
+        : this.title
+      : "Track";
+    dialog.setAttribute("label", `Track List for "${trimmedTitle}"`);
+
+    let parsedTracklist = this.tracklist;
+    if (typeof parsedTracklist === "string") {
+      try {
+        parsedTracklist = JSON.parse(parsedTracklist);
+      } catch (error) {
+        parsedTracklist = null;
+      }
+    }
+
+    const tracklistContainer = document.createElement("div");
+    tracklistContainer.style.maxHeight = "60vh";
+    tracklistContainer.style.overflow = "auto";
+
+    if (!Array.isArray(parsedTracklist) || parsedTracklist.length === 0) {
+      const emptyState = document.createElement("p");
+      emptyState.textContent = "Track list is unavailable for this record.";
+      tracklistContainer.appendChild(emptyState);
+      dialog.appendChild(tracklistContainer);
+      dialog.show();
+      closeMobileMenu();
+      return;
+    }
+
+    const headers = Array.from(
+      parsedTracklist.reduce((set, row) => {
+        if (row && typeof row === "object" && !Array.isArray(row)) {
+          Object.keys(row).forEach((key) => set.add(key));
+        }
+        return set;
+      }, new Set()),
+    );
+
+    if (headers.length === 0) {
+      const invalidState = document.createElement("p");
+      invalidState.textContent = "Track list format is invalid.";
+      tracklistContainer.appendChild(invalidState);
+      dialog.appendChild(tracklistContainer);
+      dialog.show();
+      closeMobileMenu();
+      return;
+    }
+
+    const table = document.createElement("table");
+    const thead = document.createElement("thead");
+    const headerRow = document.createElement("tr");
+    headers.forEach((header) => {
+      const th = document.createElement("th");
+      th.textContent = header;
+      headerRow.appendChild(th);
+    });
+    // Add action column header
+    const actionTh = document.createElement("th");
+
+    headerRow.appendChild(actionTh);
+    thead.appendChild(headerRow);
+
+    const tbody = document.createElement("tbody");
+    parsedTracklist.forEach((row) => {
+      const tr = document.createElement("tr");
+
+      headers.forEach((header) => {
+        const td = document.createElement("td");
+        const value = row && typeof row === "object" ? row[header] : "";
+        if (value === null || value === undefined) {
+          td.textContent = "";
+        } else if (typeof value === "object") {
+          td.textContent = JSON.stringify(value);
+        } else {
+          td.textContent = String(value);
+        }
+        tr.appendChild(td);
+      });
+
+      // Add action column with search link
+      const actionTd = document.createElement("td");
+      const artist = row && typeof row === "object" ? row["Artist"] : "";
+      const trackName = row && typeof row === "object" ? row["Track Name"] : "";
+
+      if (artist && trackName) {
+        const link = document.createElement("a");
+        const searchQuery = `${artist} ${trackName}`;
+        link.href = `https://www.google.com/search?q=${encodeURIComponent(searchQuery)}`;
+        link.target = "_blank";
+        link.rel = "noopener noreferrer";
+        link.setAttribute("aria-label", `Search for ${artist} ${trackName}`);
+        link.setAttribute("title", "Search for this track");
+        const searchIcon = document.createElement("sl-icon");
+        searchIcon.setAttribute("name", "search");
+        link.appendChild(searchIcon);
+        actionTd.appendChild(link);
+      } else {
+        actionTd.textContent = "";
+      }
+      tr.appendChild(actionTd);
+
+      tbody.appendChild(tr);
+    });
+
+    table.appendChild(thead);
+    table.appendChild(tbody);
+    tracklistContainer.appendChild(table);
+    dialog.appendChild(tracklistContainer);
+
+    dialog.show();
+    // Close mobile menu if open
+    closeMobileMenu();
+  }
+
   //render the track component
   render() {
     return html`
       <div class="track-container">
         <div class="artwork-wrapper">
           <img class="artwork" src="${this.artwork}" />
-          <svg class="artwork-overlay" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-            <rect x="2" y="2" width="20" height="20" rx="4" ry="4" fill="none" stroke="#2ecc71" stroke-width="2"/>
-            <path d="M7 12l3.5 3.5L17 8" fill="none" stroke="#2ecc71" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+          <svg
+            class="artwork-overlay"
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 24 24"
+          >
+            <rect
+              x="2"
+              y="2"
+              width="20"
+              height="20"
+              rx="4"
+              ry="4"
+              fill="none"
+              stroke="#2ecc71"
+              stroke-width="2"
+            />
+            <path
+              d="M7 12l3.5 3.5L17 8"
+              fill="none"
+              stroke="#2ecc71"
+              stroke-width="3"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            />
           </svg>
         </div>
         <div class="info">
@@ -684,7 +874,10 @@ export class SoundcloudTrack extends LitElement {
               alt="Audio Waveform"
               class="waveform-img"
             />
-            <div class="waveform-progress" style="background-image: url('${this._getOrangeWaveformUrl()}');"></div>
+            <div
+              class="waveform-progress"
+              style="background-image: url('${this._getOrangeWaveformUrl()}');"
+            ></div>
             <div class="waveform-overlay-mobile">
               <sl-range class="waveform-slider" tooltip="none"></sl-range>
             </div>
@@ -696,11 +889,32 @@ export class SoundcloudTrack extends LitElement {
                   ${SoundcloudTrack.ICONS.COPY}
                 </button>
               </sl-tooltip>
-              <sl-tooltip content="${this.isBookmark ? 'Remove Bookmark' : 'Bookmark'}" placement="left">
-                <button class="icon-btn ${this.isBookmark ? 'bookmark-btn-filled' : ''}" @click="${this._handleBookmarkClick}">
-                  ${this.isBookmark ? SoundcloudTrack.ICONS.BOOKMARK_FILLED : SoundcloudTrack.ICONS.BOOKMARK}
+              <sl-tooltip
+                content="${this.isBookmark ? "Remove Bookmark" : "Bookmark"}"
+                placement="left"
+              >
+                <button
+                  class="icon-btn ${this.isBookmark
+                    ? "bookmark-btn-filled"
+                    : ""}"
+                  @click="${this._handleBookmarkClick}"
+                >
+                  ${this.isBookmark
+                    ? SoundcloudTrack.ICONS.BOOKMARK_FILLED
+                    : SoundcloudTrack.ICONS.BOOKMARK}
                 </button>
               </sl-tooltip>
+              ${this.tracklist != null
+                ? html`<sl-tooltip content="Track List" placement="left">
+                    <button
+                      class="icon-btn"
+                      aria-label="Track List"
+                      @click="${() => this._showTrackList()}"
+                    >
+                      ${SoundcloudTrack.ICONS.TRACKLIST}
+                    </button>
+                  </sl-tooltip>`
+                : ""}
             </div>
             <span class="timestamp">.</span>
           </div>

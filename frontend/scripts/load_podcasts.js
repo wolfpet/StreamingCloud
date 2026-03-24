@@ -333,6 +333,7 @@ function renderPodcastiles(data) {
       "waveform",
       podcast.waveformUrl || "dummy_waveform.png",
     );
+    soundcloudTrack.tracklist = podcast.tracklist ?? null;
     // Set isBookmark attribute if this is a bookmark view
     if (data.isBookmark) {
       soundcloudTrack.setAttribute("isBookmark", "true");

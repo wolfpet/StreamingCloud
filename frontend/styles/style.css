@@ -179,11 +179,50 @@ body.dark-mode sl-dialog::part(panel) {
     border: none;
 }
 
+/*general dialog table */
+table {
+  width: 97%;
+  border-collapse: collapse;
+  background-color: var(--bg-color);
+  color: var(--text-color);
+  font-size: 14px;
+  border: 1px solid var(--card-color);
+  margin-top: 10px;
+  margin-bottom: 10px;
+  padding: 5px;
+}
+/* dark mode override */
+body.dark-mode table {
+  background-color: var(--darkmode-bg-color);
+  color: var(--darkmode-text-color);
+}
+table thead {
+  background-color: var(--accent-color);
+  color: var(white);
+  font-weight: bold;
+  position: sticky;
+  top: 0;
+}
+
+
+table td {
+
+  border: 1px solid var(--card-color);
+  padding: 5px 5px;
+
+}
+
+a {
+    color: var(--accent-color);
+    text-decoration: none;
+}
+
 #generalDialog::part(footer) {
     padding: 8px 27px;
     gap: 8px;
     display: none;
 }
+
 sl-button {
     --sl-color-primary-500: #ff8800;
     --sl-color-primary-600: var(--accent-color);
